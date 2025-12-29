@@ -1,23 +1,43 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
+import { Stack } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
+import 'react-native-reanimated'
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { AuthProvider, useAuth } from '@/providers/auth-providers'
+import { useColorScheme } from '@/hooks/use-color-scheme'
+
+import { SplashScreenController } from '@/components/splash-screen-controller'
 
 export const unstable_settings = {
   anchor: '(tabs)',
-};
+}
+
+function RootNavigator() {
+  const { user } = useAuth()
+  const isLoggedIn = user !== undefined && user !== null
+
+  return (
+    <Stack>
+      <Stack.Protected guard={isLoggedIn}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack.Protected>
+      <Stack.Protected guard={!isLoggedIn}>
+        <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+      </Stack.Protected>
+    </Stack>
+  )
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme()
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-      <StatusBar style="auto" />
+      <AuthProvider>
+        <SplashScreenController />
+        <RootNavigator />
+        <StatusBar style="auto" />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
