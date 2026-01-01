@@ -1,4 +1,4 @@
-import { Text } from 'react-native';
+import { AppText } from '@/components/ui/text';
 import { ReactNode } from 'react';
 
 type FormLabelProps = {
@@ -7,9 +7,9 @@ type FormLabelProps = {
 
 export function FormLabel({ children }: FormLabelProps) {
   return (
-    <Text className="text-gray-700 text-lg mb-3">
+    <AppText className="text-lg mb-3 font-manrope-600">
       {children}
-    </Text>
+    </AppText>
   );
 }
 
