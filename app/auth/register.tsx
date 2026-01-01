@@ -4,7 +4,6 @@ import { Controller, useForm } from "react-hook-form";
 import { Alert, KeyboardAvoidingView, Platform, View, Pressable } from 'react-native';
 import { object, string } from "yup";
 import { MeshGradientView } from 'expo-mesh-gradient';
-import { MotiText } from 'moti'
 
 import { Container } from '@/components/ui/container';
 import { FormError } from '@/components/ui/form-error';
@@ -16,13 +15,14 @@ import { AppText } from "@/components/ui/text";
 import { supabase } from "@/utils/supabase";
 import { useState } from "react";
 
-export default function Login() {
+export default function Register() {
+
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
   const loginSchema = object({
-    email: string().email('Please use a valid email address').required('Please enter your email'),
+    email: string().email().required('Please enter your email'),
     password: string().required('Please enter your password'),
   })
 
@@ -65,46 +65,13 @@ export default function Login() {
       >
         <View className="flex-1 flex flex-col justify-center items-center">
           <Container>
+            <AppText className="text-4xl text-white font-manrope-600 text-center">
+              Register for an account.
+            </AppText>
 
-            <MotiText
-              from={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              transition={{
-                duration: 1500
-              }}
-            >
-              <AppText className="text-4xl text-white font-manrope-600 text-center">
-                Welcome back to your digital wardrobe.
-              </AppText>
-            </MotiText>
-
-            <MotiText
-            className="mt-4"
-              from={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              transition={{
-                duration: 1500,
-                delay: 250
-              }}
-            >
-              <AppText className="text-xl text-white text-center">
-                Curate your collection, compose ensembles and showcase your style.
-              </AppText>
-            </MotiText>
+            <AppText className="text-xl text-white mt-4 text-center">
+              Manage items, create outfits and share your look.
+            </AppText>
 
             <View className="bg-white p-10 mt-20 shadow-xl rounded-xl flex flex-col gap-6">
               <View>
@@ -162,17 +129,17 @@ export default function Login() {
 
               <Button
                 onPress={onSubmit}
-                title={loading ? "Authenticating..." : "Login"}
+                title={loading ? "Creating your account..." : "Register"}
                 disabled={loading}
               />
 
               <Pressable onPress={
                 () => {
-                  router.navigate('/auth/register')
+                  router.navigate('/auth/login')
                 }
               }>
                 <AppText className="font-manrope-600">
-                  Register for an account.
+                  Already have an account? Login.
                 </AppText>
               </Pressable>
             </View>
