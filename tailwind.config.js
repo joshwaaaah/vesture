@@ -6,7 +6,14 @@ module.exports = {
   ],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'manrope-300': 'Manrope_300Light',
+        'manrope-400': 'Manrope_400Regular',
+        'manrope-500': 'Manrope_500Medium',
+        'manrope-600': 'Manrope_600SemiBold',
+      }
+    },
   },
   plugins: [],
 }

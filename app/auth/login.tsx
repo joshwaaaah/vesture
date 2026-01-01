@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { object, string } from "yup";
 
 import { Container } from '@/components/ui/container';
@@ -8,11 +8,12 @@ import { FormError } from '@/components/ui/form-error';
 import { FormLabel } from '@/components/ui/form-label';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { AppText } from "@/components/ui/text";
 
 import { supabase } from "@/utils/supabase";
 import { useState } from "react";
 
-export default function HomeScreen() {
+export default function Login() {
   const [loading, setLoading] = useState(false);
 
   const loginSchema = object({
@@ -39,20 +40,20 @@ export default function HomeScreen() {
   })
 
   return (
-    <KeyboardAvoidingView className="flex flex-1 bg-yellow-500" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <KeyboardAvoidingView className="flex flex-1 bg-black" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View className="my-auto">
         <Container>
-          <Text className="text-4xl text-white font-bold">
+          <AppText className="text-4xl text-white font-manrope-600">
             Create your account to create your digital wardrobe
-          </Text>
+          </AppText>
 
-          <Text className="text-xl text-white mt-4">
+          <AppText className="text-xl text-white mt-4">
             Create, organise and share your wardrobe.
-          </Text>
+          </AppText>
         </Container>
       </View>
 
-      <View className="bg-white py-14 rounded-tr-3xl rounded-tl-3xl">
+      <View className="bg-white py-12">
         <Container className="flex flex-col gap-4">
           <View>
             <Controller
