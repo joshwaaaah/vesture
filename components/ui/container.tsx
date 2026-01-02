@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native';
 
 type Props = {
-  className?: string
-  children: React.ReactNode,
-}
+  className?: string;
+  children: React.ReactNode;
+};
 
 export function Container({ children, className }: Props) {
   return (

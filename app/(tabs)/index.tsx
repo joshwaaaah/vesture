@@ -3,10 +3,10 @@ import { ThemedView } from '@/components/themed-view';
 
 export default function HomeScreen() {
   return (
-    <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <ThemedText type='title'>
-        Explore!
-      </ThemedText>
+    <ThemedView
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+    >
+      <ThemedText type="title">Explore!</ThemedText>
     </ThemedView>
   );
 }

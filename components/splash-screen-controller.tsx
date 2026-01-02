@@ -1,4 +1,4 @@
-import { useAuth } from '@/providers/auth-providers'
+import { useAuth } from '@/providers/auth-providers';
 import { useFonts } from '@expo-google-fonts/manrope/useFonts';
 import { Manrope_200ExtraLight } from '@expo-google-fonts/manrope/200ExtraLight';
 import { Manrope_300Light } from '@expo-google-fonts/manrope/300Light';
@@ -7,12 +7,12 @@ import { Manrope_500Medium } from '@expo-google-fonts/manrope/500Medium';
 import { Manrope_600SemiBold } from '@expo-google-fonts/manrope/600SemiBold';
 import { Manrope_700Bold } from '@expo-google-fonts/manrope/700Bold';
 
-import { SplashScreen } from 'expo-router'
+import { SplashScreen } from 'expo-router';
 
-SplashScreen.preventAutoHideAsync()
+SplashScreen.preventAutoHideAsync();
 
 export function SplashScreenController() {
-  const { loading: loadingAuthState } = useAuth()
+  const { loading: loadingAuthState } = useAuth();
 
   const [fontsLoaded, fontsLoadError] = useFonts({
     Manrope_200ExtraLight,
@@ -20,12 +20,12 @@ export function SplashScreenController() {
     Manrope_400Regular,
     Manrope_500Medium,
     Manrope_600SemiBold,
-    Manrope_700Bold
+    Manrope_700Bold,
   });
 
   if (!loadingAuthState && (fontsLoaded || fontsLoadError)) {
-    SplashScreen.hideAsync()
+    SplashScreen.hideAsync();
   }
 
-  return null
+  return null;
 }

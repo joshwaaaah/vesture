@@ -7,9 +7,6 @@ type FormLabelProps = {
 
 export function FormLabel({ children }: FormLabelProps) {
   return (
-    <AppText className="text-lg mb-3 font-manrope-600">
-      {children}
-    </AppText>
+    <AppText className="text-lg mb-3 font-manrope-600">{children}</AppText>
   );
 }
-

@@ -1,22 +1,27 @@
-import { yupResolver } from "@hookform/resolvers/yup";
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'expo-router';
-import { Controller, useForm } from "react-hook-form";
-import { Alert, KeyboardAvoidingView, Platform, View, Pressable } from 'react-native';
-import { object, string } from "yup";
+import { Controller, useForm } from 'react-hook-form';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  View,
+  Pressable,
+} from 'react-native';
+import { object, string } from 'yup';
 import { MeshGradientView } from 'expo-mesh-gradient';
 
 import { Container } from '@/components/ui/container';
 import { FormError } from '@/components/ui/form-error';
 import { FormLabel } from '@/components/ui/form-label';
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { AppText } from "@/components/ui/text";
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { AppText } from '@/components/ui/text';
 
-import { supabase } from "@/utils/supabase";
-import { useState } from "react";
+import { supabase } from '@/utils/supabase';
+import { useState } from 'react';
 
 export default function Register() {
-
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -24,33 +29,46 @@ export default function Register() {
   const loginSchema = object({
     email: string().email().required('Please enter your email'),
     password: string().required('Please enter your password'),
-  })
+  });
 
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(loginSchema)
-  })
+    resolver: yupResolver(loginSchema),
+  });
 
   const onSubmit = handleSubmit(async (data) => {
-    setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword(data)
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword(data);
     if (error) {
-      Alert.alert('Your credentials are incorrect')
+      Alert.alert('Your credentials are incorrect');
     }
 
-    setLoading(false)
-  })
+    setLoading(false);
+  });
 
   return (
-    <KeyboardAvoidingView className="flex flex-1 bg-black" behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <KeyboardAvoidingView
+      className="flex flex-1 bg-black"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <MeshGradientView
         style={{ flex: 1 }}
         columns={3}
         rows={3}
-        colors={['black', '#292828', 'black', '#292828', 'black', '#292828', 'black', 'black', '#292828']}
+        colors={[
+          'black',
+          '#292828',
+          'black',
+          '#292828',
+          'black',
+          '#292828',
+          'black',
+          'black',
+          '#292828',
+        ]}
         points={[
           [0.0, 0.0],
           [0.5, 0.0],
@@ -79,9 +97,7 @@ export default function Register() {
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <>
-                      <FormLabel>
-                        Email
-                      </FormLabel>
+                      <FormLabel>Email</FormLabel>
                       <Input
                         placeholder="Enter your email"
                         onBlur={onBlur}
@@ -106,9 +122,7 @@ export default function Register() {
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <>
-                      <FormLabel>
-                        Password
-                      </FormLabel>
+                      <FormLabel>Password</FormLabel>
                       <Input
                         placeholder="Enter your password"
                         onBlur={onBlur}
@@ -129,15 +143,15 @@ export default function Register() {
 
               <Button
                 onPress={onSubmit}
-                title={loading ? "Creating your account..." : "Register"}
+                title={loading ? 'Creating your account...' : 'Register'}
                 disabled={loading}
               />
 
-              <Pressable onPress={
-                () => {
-                  router.navigate('/auth/login')
-                }
-              }>
+              <Pressable
+                onPress={() => {
+                  router.navigate('/auth/login');
+                }}
+              >
                 <AppText className="font-manrope-600">
                   Already have an account? Login.
                 </AppText>
