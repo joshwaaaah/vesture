@@ -1,12 +1,10 @@
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppText } from '@/components/ui/text';
 
 export default function HomeScreen() {
   return (
-    <ThemedView
-      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-    >
-      <ThemedText type="title">Explore!</ThemedText>
-    </ThemedView>
+    <SafeAreaView className="bg-black flex-1">
+      <AppText className="text-white">Home</AppText>
+    </SafeAreaView>
   );
 }
