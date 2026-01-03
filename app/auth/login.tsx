@@ -46,7 +46,7 @@ export default function Login() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword(data);
     if (error) {
-      Alert.alert('Your credentials are incorrect');
+      Alert.alert(error.message);
     }
 
     setLoading(false);
@@ -179,7 +179,8 @@ export default function Login() {
 
               <Button
                 onPress={onSubmit}
-                title={loading ? 'Authenticating...' : 'Login'}
+                title="Login"
+                loading={loading}
                 disabled={loading}
               />
 
