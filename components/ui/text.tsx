@@ -7,7 +7,7 @@ type AppTextProps = TextProps & {
 };
 
 export function AppText({ className, ...props }: AppTextProps) {
-  const mergedClassName = twMerge('font-manrope-400', className);
+  const mergedClassName = twMerge('font-eb-garamond-400', className);
 
   return <Text {...props} className={mergedClassName} />;
 }
