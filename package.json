@@ -6,7 +6,8 @@
     "start": "expo start -- --tunnel",
     "reset-project": "node ./scripts/reset-project.js",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "types:db": "supabase gen types typescript --project-id aqcmjdnqncecnwmvlbld --schema public > types/database.types.ts"
   },
   "dependencies": {
     "@expo-google-fonts/eb-garamond": "^0.4.2",
