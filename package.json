@@ -8,8 +8,11 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "types:db": "supabase gen types typescript --project-id aqcmjdnqncecnwmvlbld --schema public > types/database.types.ts",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch --passWithNoTests"
+    "test": "jest --passWithNoTests --detectOpenHandles",
+    "test:watch": "jest --watchAll --detectOpenHandles"
+  },
+  "jest": {
+    "preset": "jest-expo"
   },
   "dependencies": {
     "@expo-google-fonts/eb-garamond": "^0.4.2",
@@ -61,7 +64,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^30.3.0",
-    "jest-expo": "^55.0.12-canary-20260328-2049187",
+    "jest-expo": "^54.0.17",
     "prettier": "^3.7.4",
     "typescript": "~5.9.2"
   },
