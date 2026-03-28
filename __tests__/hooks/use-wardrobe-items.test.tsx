@@ -1,5 +1,8 @@
 import { renderHook, waitFor } from '@testing-library/react-native';
-import { useWardrobeItems, type WardrobeItem } from '@/hooks/use-wardrobe-items';
+import {
+  useWardrobeItems,
+  type WardrobeItem,
+} from '@/hooks/use-wardrobe-items';
 import { createWrapper } from '@/test-utils/create-wrapper';
 import { supabase } from '@/utils/supabase';
 
@@ -9,7 +12,7 @@ jest.mock('@/utils/supabase', () => ({
   },
 }));
 
-const mockFrom = supabase.from as jest.Mock;
+const mockFrom = jest.mocked(supabase.from);
 
 const mockItems: WardrobeItem[] = [
   {

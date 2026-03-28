@@ -12,7 +12,7 @@ jest.mock('expo-router', () => ({
   router: { push: jest.fn() },
 }));
 
-const mockFrom = supabase.from;
+const mockFrom = jest.mocked(supabase.from);
 
 const mockItems: WardrobeItem[] = [
   {
