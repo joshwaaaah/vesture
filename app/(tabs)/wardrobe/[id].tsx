@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image, Pressable, ScrollView, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -8,7 +8,6 @@ import { getWardrobeItemById } from '@/lib/wardrobe-items';
 
 export default function WardrobeItemDetailScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
-  const insets = useSafeAreaInsets();
   const numericId = typeof id === 'string' ? Number(id) : Number.NaN;
   const item = Number.isNaN(numericId) ? undefined : getWardrobeItemById(numericId);
 
@@ -31,7 +30,7 @@ export default function WardrobeItemDetailScreen() {
           </Pressable>
         </View>
 
-        <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 60 }}>
+        <ScrollView contentInsetAdjustmentBehavior="automatic">
           <Image
             source={{ uri: item.image }}
             className="w-full aspect-[3/4]"

@@ -48,6 +48,7 @@ export default function WardrobeScreen() {
           numColumns={2}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
+          contentInsetAdjustmentBehavior="automatic"
         />
       </SafeAreaView>
     </>
