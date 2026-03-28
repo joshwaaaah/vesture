@@ -7,7 +7,9 @@
     "reset-project": "node ./scripts/reset-project.js",
     "web": "expo start --web",
     "lint": "expo lint",
-    "types:db": "supabase gen types typescript --project-id aqcmjdnqncecnwmvlbld --schema public > types/database.types.ts"
+    "types:db": "supabase gen types typescript --project-id aqcmjdnqncecnwmvlbld --schema public > types/database.types.ts",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests"
   },
   "dependencies": {
     "@expo-google-fonts/eb-garamond": "^0.4.2",
@@ -18,6 +20,7 @@
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
     "@supabase/supabase-js": "^2.89.0",
+    "@tanstack/react-query": "^5.95.2",
     "expo": "~54.0.30",
     "expo-constants": "~18.0.12",
     "expo-font": "~14.0.11",
@@ -50,11 +53,15 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.1.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "jest": "^30.3.0",
+    "jest-expo": "^55.0.12-canary-20260328-2049187",
     "prettier": "^3.7.4",
     "typescript": "~5.9.2"
   },
