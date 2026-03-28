@@ -57,6 +57,41 @@ describe('<WardrobeScreen />', () => {
     );
   });
 
+  it('shows the correct item count for a single item', async () => {
+    mockFrom.mockReturnValue({
+      select: jest.fn().mockResolvedValue({ data: mockItems, error: null }),
+    });
+
+    render(<WardrobeScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() => expect(screen.getByText('1 item')).toBeTruthy());
+  });
+
+  it('shows the correct item count for multiple items', async () => {
+    const twoItems: WardrobeItem[] = [
+      ...mockItems,
+      { ...mockItems[0], id: 'uuid-2' },
+    ];
+
+    mockFrom.mockReturnValue({
+      select: jest.fn().mockResolvedValue({ data: twoItems, error: null }),
+    });
+
+    render(<WardrobeScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() => expect(screen.getByText('2 items')).toBeTruthy());
+  });
+
+  it('shows "0 items" when there are no items', async () => {
+    mockFrom.mockReturnValue({
+      select: jest.fn().mockResolvedValue({ data: [], error: null }),
+    });
+
+    render(<WardrobeScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() => expect(screen.getByText('0 items')).toBeTruthy());
+  });
+
   it('shows an error state when the query fails', async () => {
     mockFrom.mockReturnValue({
       select: jest.fn().mockResolvedValue({
