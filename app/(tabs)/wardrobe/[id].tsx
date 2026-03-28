@@ -9,7 +9,9 @@ import { getWardrobeItemById } from '@/lib/wardrobe-items';
 export default function WardrobeItemDetailScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
   const numericId = typeof id === 'string' ? Number(id) : Number.NaN;
-  const item = Number.isNaN(numericId) ? undefined : getWardrobeItemById(numericId);
+  const item = Number.isNaN(numericId)
+    ? undefined
+    : getWardrobeItemById(numericId);
 
   if (!item) {
     return (
@@ -21,12 +23,13 @@ export default function WardrobeItemDetailScreen() {
 
   return (
     <>
-      <SafeAreaView className="flex-1 bg-white" edges={['right', 'left', 'top']}>
+      <SafeAreaView
+        className="flex-1 bg-white"
+        edges={['right', 'left', 'top']}
+      >
         <View className="px-6 py-4 border-y border-neutral-200">
           <Pressable onPress={() => router.back()}>
-            <AppText className="text-xl">
-              Back to wardrobe
-            </AppText>
+            <AppText className="text-xl">Back to wardrobe</AppText>
           </Pressable>
         </View>
 
@@ -55,8 +58,12 @@ export default function WardrobeItemDetailScreen() {
             <View className="border-t border-neutral-200 pt-4 mt-2 space-y-2">
               {item.category ? (
                 <View className="flex-row justify-between">
-                  <AppText className="text-neutral-500 text-lg">Category</AppText>
-                  <AppText className="text-black text-lg">{item.category}</AppText>
+                  <AppText className="text-neutral-500 text-lg">
+                    Category
+                  </AppText>
+                  <AppText className="text-black text-lg">
+                    {item.category}
+                  </AppText>
                 </View>
               ) : null}
               {item.color ? (
@@ -75,7 +82,9 @@ export default function WardrobeItemDetailScreen() {
 
             {item.notes ? (
               <View className="mt-6">
-                <AppText className="text-neutral-500 mb-1 text-lg">Notes</AppText>
+                <AppText className="text-neutral-500 mb-1 text-lg">
+                  Notes
+                </AppText>
                 <AppText className="text-black text-lg">{item.notes}</AppText>
               </View>
             ) : null}
@@ -85,4 +94,3 @@ export default function WardrobeItemDetailScreen() {
     </>
   );
 }
-

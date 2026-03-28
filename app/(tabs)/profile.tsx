@@ -3,7 +3,7 @@ import { AppText } from '@/components/ui/text';
 
 export default function ProfileScreen() {
   return (
-    <SafeAreaView className="bg-black flex-1">
+    <SafeAreaView className="flex-1">
       <AppText className="text-white">Profile</AppText>
     </SafeAreaView>
   );
