@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 type WardrobeItemProps = {
   title: string;
-  image: string;
+  image: string | null;
   price: number;
   favourited?: boolean;
 };
@@ -17,11 +17,17 @@ export default function WardrobeItem({
 }: WardrobeItemProps) {
   return (
     <View className="border-b border-r border-neutral-200">
-      <Image
-        source={{ uri: image }}
-        className="w-full aspect-[3/4]"
-        resizeMode="cover"
-      />
+      {image ? (
+        <Image
+          source={{ uri: image }}
+          className="w-full aspect-[3/4]"
+          resizeMode="cover"
+        />
+      ) : (
+        <View className="w-full aspect-[3/4] bg-neutral-100 items-center justify-center">
+          <Ionicons name="image-outline" size={32} color="#a3a3a3" />
+        </View>
+      )}
       <View className="p-4 flex flex-row gap-2 justify-between">
         <View>
           <AppText className="text-black text-xl">{title}</AppText>
