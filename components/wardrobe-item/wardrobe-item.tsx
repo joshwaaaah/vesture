@@ -18,7 +18,11 @@ export default function WardrobeItem({
   return (
     <View className="border-b border-r border-neutral-200">
       {image ? (
-        <Image source={{ uri: image }} className="w-full aspect-[3/4]" resizeMode="cover" />
+        <Image
+          source={{ uri: image }}
+          className="w-full aspect-[3/4]"
+          resizeMode="cover"
+        />
       ) : (
         <View className="w-full aspect-[3/4] bg-neutral-100 items-center justify-center">
           <Ionicons name="image-outline" size={32} color="#a3a3a3" />
