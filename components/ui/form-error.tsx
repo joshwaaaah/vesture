@@ -7,5 +7,5 @@ type FormErrorProps = {
 export function FormError({ error }: FormErrorProps) {
   if (!error?.message) return null;
 
-  return <AppText className="font-manrope-400 mt-2">{error.message}</AppText>;
+  return <AppText className="font-manrope-600 mt-2">{error.message}</AppText>;
 }

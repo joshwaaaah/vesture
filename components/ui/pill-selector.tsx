@@ -26,7 +26,7 @@ export function PillSelector({ options, selectedId, onSelect }: Props) {
             }`}
           >
             <AppText
-              className={`font-manrope-600 text-sm ${isSelected ? 'text-white' : 'text-black'}`}
+              className={`font-manrope-500 text-sm ${isSelected ? 'text-white' : 'text-black'}`}
             >
               {option.name}
             </AppText>
