@@ -9,9 +9,11 @@ import {
   useWardrobeItems,
   type WardrobeItem as WardrobeItemType,
 } from '@/hooks/use-wardrobe-items';
+import { useDefaultWardrobe } from '@/hooks/use-default-wardrobe';
 
 export default function WardrobeScreen() {
   const { data, isLoading, isError } = useWardrobeItems();
+  const { data: wardrobe } = useDefaultWardrobe();
 
   const renderContent = () => {
     if (isLoading) {
@@ -82,6 +84,17 @@ export default function WardrobeScreen() {
       >
         <View className="px-6 py-4 border-y border-neutral-200 flex-row items-center justify-between">
           <AppText className="text-3xl font-eb-garamond-400">Vesture</AppText>
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: '/wardrobe/create',
+                params: { wardrobeId: wardrobe?.id },
+              })
+            }
+            disabled={!wardrobe}
+          >
+            <Ionicons name="add" size={28} color="black" />
+          </Pressable>
         </View>
 
         <View className="px-6 flex-row items-center justify-between py-4 border-b border-neutral-200">
