@@ -26,8 +26,9 @@ export default function WardrobeItemDetailScreen() {
     );
   }
 
-  if (!item) return null;
-
+  if (!item) {
+    return null;
+  };
 
   return (
     <>
