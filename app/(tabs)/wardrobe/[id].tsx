@@ -26,13 +26,8 @@ export default function WardrobeItemDetailScreen() {
     );
   }
 
-  if (!item) {
-    return (
-      <SafeAreaView className="flex-1 items-center justify-center px-6">
-        <AppText className="text-lg text-neutral-700">Item not found. Has it vanished!?</AppText>
-      </SafeAreaView>
-    );
-  }
+  if (!item) return null;
+
 
   return (
     <>
