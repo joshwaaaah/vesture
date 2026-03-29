@@ -1,6 +1,7 @@
 import { QueryData } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/utils/supabase';
+import { NotFoundError } from '@/utils/errors';
 
 const buildQuery = (id: string) =>
   supabase
@@ -18,7 +19,7 @@ export function useWardrobeItem(id: string | undefined) {
     queryFn: async () => {
       const { data, error } = await buildQuery(id!);
       if (error) throw error;
-      if (!data) throw new Error('Item not found');
+      if (!data) throw new NotFoundError('Item not found');
       return data;
     },
   });

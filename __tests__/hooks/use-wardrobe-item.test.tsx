@@ -1,5 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react-native';
 import { useWardrobeItem, type WardrobeItemWithDetails } from '@/hooks/use-wardrobe-item';
+import { NotFoundError } from '@/utils/errors';
 import { createWrapper } from '@/test-utils/create-wrapper';
 
 jest.mock('@/utils/supabase', () => ({
@@ -78,5 +79,6 @@ describe('useWardrobeItem', () => {
     });
 
     await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(result.current.error).toBeInstanceOf(NotFoundError);
   });
 });
