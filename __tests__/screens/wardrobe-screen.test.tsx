@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react-native';
+import { render, screen, waitFor, act } from '@testing-library/react-native';
 import WardrobeScreen from '@/app/(tabs)/wardrobe/index';
 import { createWrapper } from '@/test-utils/create-wrapper';
 import { supabase } from '@/utils/supabase';
@@ -10,6 +10,10 @@ jest.mock('@/utils/supabase', () => ({
 
 jest.mock('expo-router', () => ({
   router: { push: jest.fn() },
+}));
+
+jest.mock('@/hooks/use-default-wardrobe', () => ({
+  useDefaultWardrobe: () => ({ data: null }),
 }));
 
 const mockFrom = jest.mocked(supabase.from);
@@ -33,6 +37,7 @@ const mockItems: WardrobeItem[] = [
 ];
 
 beforeEach(() => jest.clearAllMocks());
+afterEach(async () => { await act(async () => {}); });
 
 describe('<WardrobeScreen />', () => {
   it('renders item titles when data loads', async () => {
