@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ToastProvider } from 'react-native-toast-notifications';
 
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
@@ -42,11 +43,13 @@ function RootNavigator() {
 export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <SplashScreenController />
-        <RootNavigator />
-        <StatusBar style="auto" />
-      </AuthProvider>
+      <ToastProvider>
+        <AuthProvider>
+          <SplashScreenController />
+          <RootNavigator />
+          <StatusBar style="auto" />
+        </AuthProvider>
+      </ToastProvider>
     </QueryClientProvider>
   );
 }
