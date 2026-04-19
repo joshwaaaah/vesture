@@ -1,7 +1,13 @@
-import { render, screen, waitFor, fireEvent } from '@testing-library/react-native';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+} from '@testing-library/react-native';
 import CreateWardrobeItemScreen from '@/app/(tabs)/wardrobe/create';
 import { supabase } from '@/utils/supabase';
 import { createWrapper } from '@/test-utils/create-wrapper';
+import type { Tables } from '@/types/database.types';
 
 jest.mock('@/utils/supabase', () => ({
   supabase: {
@@ -11,7 +17,9 @@ jest.mock('@/utils/supabase', () => ({
 
 jest.mock('expo-router', () => ({
   router: { back: jest.fn() },
-  useLocalSearchParams: jest.fn().mockReturnValue({ wardrobeId: 'wardrobe-uuid-1' }),
+  useLocalSearchParams: jest
+    .fn()
+    .mockReturnValue({ wardrobeId: 'wardrobe-uuid-1' }),
 }));
 
 jest.mock('@/providers/auth-providers', () => ({
@@ -21,14 +29,18 @@ jest.mock('@/providers/auth-providers', () => ({
 const mockFrom = supabase.from as jest.Mock;
 const mockInsertSingle = jest.fn();
 
-const taxonomyData = {
+const taxonomyData: {
+  categories: Tables<'categories'>[];
+  colors: Tables<'colors'>[];
+  sizes: Tables<'sizes'>[];
+} = {
   categories: [
-    { id: 'parent-1', name: 'Tops',    parent_id: null },
+    { id: 'parent-1', name: 'Tops', parent_id: null },
     { id: 'parent-2', name: 'Bottoms', parent_id: null },
-    { id: 'cat-1', name: 'T-Shirts',  parent_id: 'parent-1' },
-    { id: 'cat-2', name: 'Shirts',    parent_id: 'parent-1' },
-    { id: 'cat-3', name: 'Jeans',     parent_id: 'parent-2' },
-    { id: 'cat-4', name: 'Trousers',  parent_id: 'parent-2' },
+    { id: 'cat-1', name: 'T-Shirts', parent_id: 'parent-1' },
+    { id: 'cat-2', name: 'Shirts', parent_id: 'parent-1' },
+    { id: 'cat-3', name: 'Jeans', parent_id: 'parent-2' },
+    { id: 'cat-4', name: 'Trousers', parent_id: 'parent-2' },
   ],
   colors: [
     { id: 'col-1', name: 'Black' },
@@ -43,7 +55,7 @@ const taxonomyData = {
 beforeEach(() => {
   jest.clearAllMocks();
 
-  mockFrom.mockImplementation((table: string) => {
+  mockFrom.mockImplementation((table: keyof typeof taxonomyData | 'wardrobe_items') => {
     if (table === 'wardrobe_items') {
       return {
         insert: jest.fn().mockReturnValue({
@@ -61,7 +73,10 @@ beforeEach(() => {
     };
   });
 
-  mockInsertSingle.mockResolvedValue({ data: { id: 'item-uuid-1' }, error: null });
+  mockInsertSingle.mockResolvedValue({
+    data: { id: 'item-uuid-1' },
+    error: null,
+  });
 });
 
 describe('<CreateWardrobeItemScreen />', () => {
@@ -79,7 +94,10 @@ describe('<CreateWardrobeItemScreen />', () => {
 
     render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
 
-    fireEvent.changeText(screen.getByPlaceholderText('e.g. Black Jacket'), 'Black Jacket');
+    fireEvent.changeText(
+      screen.getByPlaceholderText('e.g. Black Jacket'),
+      'Black Jacket',
+    );
     fireEvent.changeText(screen.getByPlaceholderText('e.g. 49.99'), '49.99');
 
     await waitFor(() => expect(screen.getByText('Tops')).toBeTruthy());
@@ -89,7 +107,9 @@ describe('<CreateWardrobeItemScreen />', () => {
 
     fireEvent.press(screen.getByText('Add item to wardrobe'));
 
-    await waitFor(() => expect(screen.getByTestId('submit-loading')).toBeTruthy());
+    await waitFor(() =>
+      expect(screen.getByTestId('submit-loading')).toBeTruthy(),
+    );
   });
 
   it('shows a validation error when title is empty', async () => {
@@ -97,7 +117,9 @@ describe('<CreateWardrobeItemScreen />', () => {
 
     fireEvent.press(screen.getByText('Add item to wardrobe'));
 
-    await waitFor(() => expect(screen.getByText('Please enter a title')).toBeTruthy());
+    await waitFor(() =>
+      expect(screen.getByText('Please enter a title')).toBeTruthy(),
+    );
   });
 
   it('shows a validation error when price is empty', async () => {
@@ -105,7 +127,9 @@ describe('<CreateWardrobeItemScreen />', () => {
 
     fireEvent.press(screen.getByText('Add item to wardrobe'));
 
-    await waitFor(() => expect(screen.getByText('Please enter a price')).toBeTruthy());
+    await waitFor(() =>
+      expect(screen.getByText('Please enter a price')).toBeTruthy(),
+    );
   });
 
   it('calls router.back() after a successful submission', async () => {
@@ -113,7 +137,10 @@ describe('<CreateWardrobeItemScreen />', () => {
 
     render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
 
-    fireEvent.changeText(screen.getByPlaceholderText('e.g. Black Jacket'), 'Black Jacket');
+    fireEvent.changeText(
+      screen.getByPlaceholderText('e.g. Black Jacket'),
+      'Black Jacket',
+    );
     fireEvent.changeText(screen.getByPlaceholderText('e.g. 49.99'), '49.99');
 
     await waitFor(() => expect(screen.getByText('Tops')).toBeTruthy());
@@ -156,7 +183,10 @@ describe('<CreateWardrobeItemScreen />', () => {
   it('shows a validation error when no category is selected', async () => {
     render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
 
-    fireEvent.changeText(screen.getByPlaceholderText('e.g. Black Jacket'), 'Black Jacket');
+    fireEvent.changeText(
+      screen.getByPlaceholderText('e.g. Black Jacket'),
+      'Black Jacket',
+    );
     fireEvent.changeText(screen.getByPlaceholderText('e.g. 49.99'), '49.99');
     fireEvent.press(screen.getByText('Add item to wardrobe'));
 
@@ -172,12 +202,17 @@ describe('<CreateWardrobeItemScreen />', () => {
     fireEvent.press(screen.getByText('Tops'));
     await waitFor(() => expect(screen.getByText('T-Shirts')).toBeTruthy());
 
-    fireEvent.changeText(screen.getByPlaceholderText('e.g. Black Jacket'), 'Black Jacket');
+    fireEvent.changeText(
+      screen.getByPlaceholderText('e.g. Black Jacket'),
+      'Black Jacket',
+    );
     fireEvent.changeText(screen.getByPlaceholderText('e.g. 49.99'), '49.99');
     fireEvent.press(screen.getByText('Add item to wardrobe'));
 
     await waitFor(() =>
-      expect(screen.getByText('Please select a more specific category')).toBeTruthy(),
+      expect(
+        screen.getByText('Please select a more specific category'),
+      ).toBeTruthy(),
     );
   });
 
