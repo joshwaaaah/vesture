@@ -4,7 +4,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ScrollView, View, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useToast } from 'react-native-toast-notifications';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
