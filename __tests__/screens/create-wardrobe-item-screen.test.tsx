@@ -1,4 +1,4 @@
-import { render, screen, waitFor, fireEvent, act } from '@testing-library/react-native';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react-native';
 import CreateWardrobeItemScreen from '@/app/(tabs)/wardrobe/create';
 import { supabase } from '@/utils/supabase';
 import { createWrapper } from '@/test-utils/create-wrapper';
@@ -67,10 +67,11 @@ beforeEach(() => {
 describe('<CreateWardrobeItemScreen />', () => {
   it('renders a title input and a submit button', async () => {
     render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
-    await act(async () => {});
 
-    expect(screen.getByPlaceholderText('e.g. Black Jacket')).toBeTruthy();
-    expect(screen.getByText('Add item to wardrobe')).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('e.g. Black Jacket')).toBeTruthy();
+      expect(screen.getByText('Add item to wardrobe')).toBeTruthy();
+    });
   });
 
   it('shows a loading state while the mutation is in progress', async () => {
@@ -210,7 +211,7 @@ describe('<CreateWardrobeItemScreen />', () => {
 
   it('preserves a decimal point while typing in the price field', async () => {
     render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
-    await act(async () => {});
+    await waitFor(() => screen.getByText('Tops'));
 
     const priceInput = screen.getByPlaceholderText('e.g. 49.99');
     fireEvent.changeText(priceInput, '49.');
