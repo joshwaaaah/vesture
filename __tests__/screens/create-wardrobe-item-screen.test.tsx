@@ -21,10 +21,14 @@ jest.mock('@/providers/auth-providers', () => ({
 const mockFrom = supabase.from as jest.Mock;
 const mockInsertSingle = jest.fn();
 
-const taxonomyData: Record<string, { id: string; name: string }[]> = {
+const taxonomyData = {
   categories: [
-    { id: 'cat-1', name: 'Tops' },
-    { id: 'cat-2', name: 'Trousers' },
+    { id: 'parent-1', name: 'Tops',    parent_id: null },
+    { id: 'parent-2', name: 'Bottoms', parent_id: null },
+    { id: 'cat-1', name: 'T-Shirts',  parent_id: 'parent-1' },
+    { id: 'cat-2', name: 'Shirts',    parent_id: 'parent-1' },
+    { id: 'cat-3', name: 'Jeans',     parent_id: 'parent-2' },
+    { id: 'cat-4', name: 'Trousers',  parent_id: 'parent-2' },
   ],
   colors: [
     { id: 'col-1', name: 'Black' },
@@ -76,6 +80,12 @@ describe('<CreateWardrobeItemScreen />', () => {
 
     fireEvent.changeText(screen.getByPlaceholderText('e.g. Black Jacket'), 'Black Jacket');
     fireEvent.changeText(screen.getByPlaceholderText('e.g. 49.99'), '49.99');
+
+    await waitFor(() => expect(screen.getByText('Tops')).toBeTruthy());
+    fireEvent.press(screen.getByText('Tops'));
+    await waitFor(() => expect(screen.getByText('T-Shirts')).toBeTruthy());
+    fireEvent.press(screen.getByText('T-Shirts'));
+
     fireEvent.press(screen.getByText('Add item to wardrobe'));
 
     await waitFor(() => expect(screen.getByTestId('submit-loading')).toBeTruthy());
@@ -104,16 +114,84 @@ describe('<CreateWardrobeItemScreen />', () => {
 
     fireEvent.changeText(screen.getByPlaceholderText('e.g. Black Jacket'), 'Black Jacket');
     fireEvent.changeText(screen.getByPlaceholderText('e.g. 49.99'), '49.99');
+
+    await waitFor(() => expect(screen.getByText('Tops')).toBeTruthy());
+    fireEvent.press(screen.getByText('Tops'));
+    await waitFor(() => expect(screen.getByText('T-Shirts')).toBeTruthy());
+    fireEvent.press(screen.getByText('T-Shirts'));
+
     fireEvent.press(screen.getByText('Add item to wardrobe'));
 
     await waitFor(() => expect(router.back).toHaveBeenCalled());
   });
 
-  it('renders category options', async () => {
+  it('renders parent category options', async () => {
     render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
 
     await waitFor(() => expect(screen.getByText('Tops')).toBeTruthy());
-    expect(screen.getByText('Trousers')).toBeTruthy();
+    expect(screen.getByText('Bottoms')).toBeTruthy();
+  });
+
+  it('does not render subcategory pills until a parent is selected', async () => {
+    render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() => expect(screen.getByText('Tops')).toBeTruthy());
+
+    expect(screen.queryByText('T-Shirts')).toBeNull();
+    expect(screen.queryByText('Jeans')).toBeNull();
+  });
+
+  it('renders subcategory pills after selecting a parent', async () => {
+    render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() => expect(screen.getByText('Tops')).toBeTruthy());
+    fireEvent.press(screen.getByText('Tops'));
+
+    await waitFor(() => expect(screen.getByText('T-Shirts')).toBeTruthy());
+    expect(screen.getByText('Shirts')).toBeTruthy();
+    expect(screen.queryByText('Jeans')).toBeNull();
+  });
+
+  it('shows a validation error when no category is selected', async () => {
+    render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
+
+    fireEvent.changeText(screen.getByPlaceholderText('e.g. Black Jacket'), 'Black Jacket');
+    fireEvent.changeText(screen.getByPlaceholderText('e.g. 49.99'), '49.99');
+    fireEvent.press(screen.getByText('Add item to wardrobe'));
+
+    await waitFor(() =>
+      expect(screen.getByText('Please select a category')).toBeTruthy(),
+    );
+  });
+
+  it('shows a validation error when a parent is selected but no subcategory is chosen', async () => {
+    render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() => expect(screen.getByText('Tops')).toBeTruthy());
+    fireEvent.press(screen.getByText('Tops'));
+    await waitFor(() => expect(screen.getByText('T-Shirts')).toBeTruthy());
+
+    fireEvent.changeText(screen.getByPlaceholderText('e.g. Black Jacket'), 'Black Jacket');
+    fireEvent.changeText(screen.getByPlaceholderText('e.g. 49.99'), '49.99');
+    fireEvent.press(screen.getByText('Add item to wardrobe'));
+
+    await waitFor(() =>
+      expect(screen.getByText('Please select a more specific category')).toBeTruthy(),
+    );
+  });
+
+  it('clears the subcategory selection when the parent changes', async () => {
+    render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() => expect(screen.getByText('Tops')).toBeTruthy());
+    fireEvent.press(screen.getByText('Tops'));
+    await waitFor(() => expect(screen.getByText('T-Shirts')).toBeTruthy());
+    fireEvent.press(screen.getByText('T-Shirts'));
+
+    fireEvent.press(screen.getByText('Bottoms'));
+
+    await waitFor(() => expect(screen.getByText('Jeans')).toBeTruthy());
+    expect(screen.queryByText('T-Shirts')).toBeNull();
   });
 
   it('renders color options', async () => {

@@ -2,7 +2,13 @@ import * as yup from 'yup';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ScrollView, View, Pressable, ActivityIndicator, Alert } from 'react-native';
+import {
+  ScrollView,
+  View,
+  Pressable,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { AppText } from '@/components/ui/text';
@@ -20,7 +26,15 @@ const schema = yup.object({
   title: yup.string().required('Please enter a title'),
   price: yup.number().required('Please enter a price'),
   notes: yup.string().nullable().optional(),
-  category_id: yup.string().nullable().optional(),
+  parent_category_id: yup.string().required('Please select a category'),
+  category_id: yup
+    .string()
+    .nullable()
+    .when('parent_category_id', {
+      is: (v: string | null | undefined) => !!v,
+      then: (schema) =>
+        schema.required('Please select a more specific category'),
+    }),
   color_id: yup.string().nullable().optional(),
   size_id: yup.string().nullable().optional(),
 });
@@ -37,10 +51,20 @@ export default function CreateWardrobeItemScreen() {
   const {
     control,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const selectedParentId = watch('parent_category_id') ?? null;
+
+  const parentCategories =
+    categories?.filter((cat) => cat.parent_id === null) ?? [];
+  const subcategories = selectedParentId
+    ? (categories?.filter((cat) => cat.parent_id === selectedParentId) ?? [])
+    : [];
 
   if (!wardrobeId) {
     router.back();
@@ -48,23 +72,22 @@ export default function CreateWardrobeItemScreen() {
   }
 
   const onSubmit = handleSubmit(async (formData) => {
-    createWardrobeItem({
-      ...formData,
-      wardrobe_id: wardrobeId,
-      user_id: user.id
-    }, {
-      onSuccess: () => {
-        router.back();
+    createWardrobeItem(
+      {
+        ...formData,
+        wardrobe_id: wardrobeId,
+        user_id: user.id,
       },
-      onError: () => {
-        Alert.alert('We were unable to add your item')
-      }
-    });
+      {
+        onSuccess: () => router.back(),
+        onError: () => Alert.alert('We were unable to add your item'),
+      },
+    );
   });
-  
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView contentContainerClassName="px-6 gap-4">
+      <ScrollView contentContainerClassName="px-6 gap-6">
         <View>
           <FormLabel>Title</FormLabel>
           <Controller
@@ -95,7 +118,6 @@ export default function CreateWardrobeItemScreen() {
               />
             )}
           />
-
           <FormError error={errors.price} />
         </View>
 
@@ -112,22 +134,43 @@ export default function CreateWardrobeItemScreen() {
                 onChangeText={onChange}
                 value={value ?? ''}
               />
-              
             )}
           />
         </View>
-        
-        {categories && categories.length > 0 && (
-          <View>
-            <FormLabel>Category</FormLabel>
-            <Controller
-              control={control}
-              name="category_id"
-              render={({ field: { value, onChange } }) => (
-                <PillSelector options={categories} selectedId={value} onSelect={onChange} />
-              )}
-            />
-          </View>
+
+        {parentCategories.length > 0 && (
+          <>
+            <View>
+              <FormLabel>What category does it fall into?</FormLabel>
+              <PillSelector
+                options={parentCategories}
+                selectedId={selectedParentId}
+                onSelect={(id) => {
+                  setValue('parent_category_id', id ?? '', { shouldValidate: true });
+                  setValue('category_id', null);
+                }}
+              />
+              <FormError error={errors.parent_category_id} />
+            </View>
+
+            {selectedParentId && (
+              <View>
+                <FormLabel>More specifically...</FormLabel>
+                <Controller
+                  control={control}
+                  name="category_id"
+                  render={({ field: { value, onChange } }) => (
+                    <PillSelector
+                      options={subcategories}
+                      selectedId={value}
+                      onSelect={onChange}
+                    />
+                  )}
+                />
+                <FormError error={errors.category_id} />
+              </View>
+            )}
+          </>
         )}
 
         {colors && colors.length > 0 && (
@@ -137,7 +180,11 @@ export default function CreateWardrobeItemScreen() {
               control={control}
               name="color_id"
               render={({ field: { value, onChange } }) => (
-                <PillSelector options={colors} selectedId={value} onSelect={onChange} />
+                <PillSelector
+                  options={colors}
+                  selectedId={value}
+                  onSelect={onChange}
+                />
               )}
             />
           </View>
@@ -150,7 +197,11 @@ export default function CreateWardrobeItemScreen() {
               control={control}
               name="size_id"
               render={({ field: { value, onChange } }) => (
-                <PillSelector options={sizes} selectedId={value} onSelect={onChange} />
+                <PillSelector
+                  options={sizes}
+                  selectedId={value}
+                  onSelect={onChange}
+                />
               )}
             />
           </View>
@@ -163,9 +214,15 @@ export default function CreateWardrobeItemScreen() {
             className="bg-black p-5 rounded-xl"
           >
             {isPending ? (
-              <ActivityIndicator testID="submit-loading" color="#ffffff" size="small" />
+              <ActivityIndicator
+                testID="submit-loading"
+                color="#ffffff"
+                size="small"
+              />
             ) : (
-              <AppText className="text-center text-white text-lg font-manrope-600">Add item to wardrobe</AppText>
+              <AppText className="text-center text-white text-lg font-manrope-600">
+                Add item to wardrobe
+              </AppText>
             )}
           </Pressable>
         </View>
