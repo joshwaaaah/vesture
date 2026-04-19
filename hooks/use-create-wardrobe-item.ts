@@ -16,7 +16,9 @@ export function useCreateWardrobeItem() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['wardrobe-items'] });
+      queryClient.invalidateQueries({
+        queryKey: ['wardrobe-items', 'default'],
+      });
     },
   });
 }
