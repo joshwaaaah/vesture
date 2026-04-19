@@ -105,7 +105,7 @@ export default function CreateWardrobeItemScreen() {
                 placeholder="e.g. 49.99"
                 keyboardType="decimal-pad"
                 onChangeText={onChange}
-                value={value != null ? String(value) : ''}
+                value={String(value ?? '')}
               />
             )}
           />
