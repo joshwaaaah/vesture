@@ -13,6 +13,14 @@ export default function WardrobeStackLayout() {
           title: 'Wardrobe',
         }}
       />
+      <Stack.Screen
+        name="create"
+        options={{
+          presentation: 'modal',
+          headerShown: true,
+          title: 'Add to your wardrobe',
+        }}
+      />
     </Stack>
   );
 }

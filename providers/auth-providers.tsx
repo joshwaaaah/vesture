@@ -65,4 +65,12 @@ const useAuth = () => {
   return useContext(AuthContext);
 };
 
-export { AuthProvider, useAuth };
+function useRequiredAuth() {
+  const { user, session } = useContext(AuthContext);
+  if (!user || !session) {
+    throw new Error('useRequiredAuth must be used within an authenticated screen');
+  }
+  return { user, session };
+}
+
+export { AuthProvider, useAuth, useRequiredAuth };

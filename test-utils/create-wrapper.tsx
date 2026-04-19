@@ -1,5 +1,7 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, notifyManager } from '@tanstack/react-query';
 import { ReactNode } from 'react';
+
+notifyManager.setScheduler(fn => fn());
 
 export function createWrapper() {
   const queryClient = new QueryClient({
