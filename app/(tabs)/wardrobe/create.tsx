@@ -182,7 +182,6 @@ export default function CreateWardrobeItemScreen() {
               render={({ field: { value, onChange } }) => (
                 <PillSelector
                   options={colors}
-                  jjj
                   selectedId={value}
                   onSelect={onChange}
                 />
