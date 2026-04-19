@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ScrollView, View, Alert } from 'react-native';
+import { ScrollView, View, Alert, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,7 @@ const schema = yup.object({
   title: yup.string().required('Please enter a title'),
   price: yup.number().required('Please enter a price'),
   notes: yup.string().nullable(),
+  favourited: yup.boolean().default(false),
   parent_category_id: yup.string().required('Please select a category'),
   category_id: yup
     .string()
@@ -50,6 +51,7 @@ export default function CreateWardrobeItemScreen() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: { favourited: false },
   });
 
   const selectedParentId = watch('parent_category_id') ?? null;
@@ -180,6 +182,7 @@ export default function CreateWardrobeItemScreen() {
               render={({ field: { value, onChange } }) => (
                 <PillSelector
                   options={colors}
+                  jjj
                   selectedId={value}
                   onSelect={onChange}
                 />
@@ -204,6 +207,24 @@ export default function CreateWardrobeItemScreen() {
             />
           </View>
         )}
+
+        <View>
+          <FormLabel>Add to favourites</FormLabel>
+          <Controller
+            control={control}
+            name="favourited"
+            render={({ field: { value, onChange } }) => (
+              <Switch
+                testID="favourited-switch"
+                value={value ?? false}
+                onValueChange={onChange}
+                trackColor={{ false: '#666666', true: '#000000' }}
+                ios_backgroundColor="#666666"
+                thumbColor="#ffffff"
+              />
+            )}
+          />
+        </View>
 
         <View className="mt-3">
           <Button

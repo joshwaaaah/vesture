@@ -28,6 +28,7 @@ jest.mock('@/providers/auth-providers', () => ({
 }));
 
 const mockFrom = supabase.from as jest.Mock;
+const mockInsert = jest.fn();
 const mockInsertSingle = jest.fn();
 
 const taxonomyData: {
@@ -60,7 +61,7 @@ beforeEach(() => {
     (table: keyof typeof taxonomyData | 'wardrobe_items') => {
       if (table === 'wardrobe_items') {
         return {
-          insert: jest.fn().mockReturnValue({
+          insert: mockInsert.mockReturnValue({
             select: jest.fn().mockReturnValue({
               single: mockInsertSingle,
             }),
@@ -255,5 +256,29 @@ describe('<CreateWardrobeItemScreen />', () => {
     fireEvent.changeText(priceInput, '49.33');
 
     expect(priceInput.props.value).toBe('49.33');
+  });
+
+  it('submits with favourited: true when the switch is toggled on', async () => {
+    render(<CreateWardrobeItemScreen />, { wrapper: createWrapper() });
+
+    fireEvent.changeText(screen.getByPlaceholderText('e.g. Black Jacket'), 'Black Jacket');
+    fireEvent.changeText(screen.getByPlaceholderText('e.g. 49.99'), '49.99');
+
+    await waitFor(() => expect(screen.getByText('Tops')).toBeTruthy());
+    fireEvent.press(screen.getByText('Tops'));
+    await waitFor(() => expect(screen.getByText('T-Shirts')).toBeTruthy());
+    fireEvent.press(screen.getByText('T-Shirts'));
+
+    fireEvent(screen.getByTestId('favourited-switch'), 'valueChange', true);
+
+    fireEvent.press(screen.getByText('Add item to wardrobe'));
+
+    await waitFor(() =>
+      expect(mockInsert).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({ favourited: true }),
+        ]),
+      ),
+    );
   });
 });
