@@ -65,8 +65,6 @@ export default function CreateWardrobeItemScreen() {
     return null;
   }
 
-  const toast = useToast();
-
   const onSubmit = handleSubmit(
     (formData) => {
       const { parent_category_id, ...itemData } = formData;
