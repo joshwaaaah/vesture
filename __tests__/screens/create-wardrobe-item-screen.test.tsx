@@ -1,6 +1,7 @@
+import type { Tables } from '@/types/database.types';
+
 import CreateWardrobeItemScreen from '@/app/(tabs)/wardrobe/create';
 import { createWrapper } from '@/test-utils/create-wrapper';
-import type { Tables } from '@/types/database.types';
 import { supabase } from '@/utils/supabase';
 import {
   fireEvent,
