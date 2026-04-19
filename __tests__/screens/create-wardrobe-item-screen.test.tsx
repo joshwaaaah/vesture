@@ -55,23 +55,25 @@ const taxonomyData: {
 beforeEach(() => {
   jest.clearAllMocks();
 
-  mockFrom.mockImplementation((table: keyof typeof taxonomyData | 'wardrobe_items') => {
-    if (table === 'wardrobe_items') {
-      return {
-        insert: jest.fn().mockReturnValue({
-          select: jest.fn().mockReturnValue({
-            single: mockInsertSingle,
+  mockFrom.mockImplementation(
+    (table: keyof typeof taxonomyData | 'wardrobe_items') => {
+      if (table === 'wardrobe_items') {
+        return {
+          insert: jest.fn().mockReturnValue({
+            select: jest.fn().mockReturnValue({
+              single: mockInsertSingle,
+            }),
           }),
+        };
+      }
+      return {
+        select: jest.fn().mockResolvedValue({
+          data: taxonomyData[table] ?? [],
+          error: null,
         }),
       };
-    }
-    return {
-      select: jest.fn().mockResolvedValue({
-        data: taxonomyData[table] ?? [],
-        error: null,
-      }),
-    };
-  });
+    },
+  );
 
   mockInsertSingle.mockResolvedValue({
     data: { id: 'item-uuid-1' },
@@ -249,8 +251,8 @@ describe('<CreateWardrobeItemScreen />', () => {
     await waitFor(() => screen.getByText('Tops'));
 
     const priceInput = screen.getByPlaceholderText('e.g. 49.99');
-    fireEvent.changeText(priceInput, '49.');
+    fireEvent.changeText(priceInput, '49.33');
 
-    expect(priceInput.props.value).toBe('49.');
+    expect(priceInput.props.value).toBe('49.33');
   });
 });
