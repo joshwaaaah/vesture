@@ -20,7 +20,7 @@ import { useRequiredAuth } from '@/providers/auth-providers';
 const schema = yup.object({
   title: yup.string().required('Please enter a title'),
   price: yup.number().required('Please enter a price'),
-  notes: yup.string().nullable().optional(),
+  notes: yup.string().nullable(),
   parent_category_id: yup.string().required('Please select a category'),
   category_id: yup
     .string()
@@ -30,8 +30,8 @@ const schema = yup.object({
       then: (schema) =>
         schema.required('Please select a more specific category'),
     }),
-  color_id: yup.string().nullable().optional(),
-  size_id: yup.string().nullable().optional(),
+  color_id: yup.string().nullable(),
+  size_id: yup.string().nullable(),
 });
 
 export default function CreateWardrobeItemScreen() {
