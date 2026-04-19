@@ -2,16 +2,10 @@ import * as yup from 'yup';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  ScrollView,
-  View,
-  Pressable,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
+import { ScrollView, View, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AppText } from '@/components/ui/text';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FormLabel } from '@/components/ui/form-label';
 import { FormError } from '@/components/ui/form-error';
@@ -71,13 +65,10 @@ export default function CreateWardrobeItemScreen() {
     return null;
   }
 
-  const onSubmit = handleSubmit(async (formData) => {
+  const onSubmit = handleSubmit((formData) => {
+    const { parent_category_id, ...itemData } = formData;
     createWardrobeItem(
-      {
-        ...formData,
-        wardrobe_id: wardrobeId,
-        user_id: user.id,
-      },
+      { ...itemData, wardrobe_id: wardrobeId, user_id: user.id },
       {
         onSuccess: () => router.back(),
         onError: () => Alert.alert('We were unable to add your item'),
@@ -113,7 +104,7 @@ export default function CreateWardrobeItemScreen() {
               <Input
                 placeholder="e.g. 49.99"
                 keyboardType="decimal-pad"
-                onChangeText={(text) => onChange(text)}
+                onChangeText={onChange}
                 value={value != null ? String(value) : ''}
               />
             )}
@@ -208,23 +199,13 @@ export default function CreateWardrobeItemScreen() {
         )}
 
         <View className="mt-3">
-          <Pressable
+          <Button
+            title="Add item to wardrobe"
             onPress={onSubmit}
             disabled={isPending}
-            className="bg-black p-5 rounded-xl"
-          >
-            {isPending ? (
-              <ActivityIndicator
-                testID="submit-loading"
-                color="#ffffff"
-                size="small"
-              />
-            ) : (
-              <AppText className="text-center text-white text-lg font-manrope-600">
-                Add item to wardrobe
-              </AppText>
-            )}
-          </Pressable>
+            loading={isPending}
+            testID="submit"
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
