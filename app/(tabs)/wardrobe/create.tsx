@@ -4,6 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ScrollView, View, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useToast } from 'react-native-toast-notifications';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -65,16 +66,23 @@ export default function CreateWardrobeItemScreen() {
     return null;
   }
 
-  const onSubmit = handleSubmit((formData) => {
-    const { parent_category_id, ...itemData } = formData;
-    createWardrobeItem(
-      { ...itemData, wardrobe_id: wardrobeId, user_id: user.id },
-      {
-        onSuccess: () => router.back(),
-        onError: () => Alert.alert('We were unable to add your item'),
-      },
-    );
-  });
+  const toast = useToast();
+
+  const onSubmit = handleSubmit(
+    (formData) => {
+      const { parent_category_id, ...itemData } = formData;
+      createWardrobeItem(
+        { ...itemData, wardrobe_id: wardrobeId, user_id: user.id },
+        {
+          onSuccess: () => router.back(),
+          onError: () => Alert.alert('We were unable to add your item.'),
+        },
+      );
+    },
+    () => {
+      Alert.alert('Please fix the validation issues in your submission.');
+    },
+  );
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -137,7 +145,9 @@ export default function CreateWardrobeItemScreen() {
                 options={parentCategories}
                 selectedId={selectedParentId}
                 onSelect={(id) => {
-                  setValue('parent_category_id', id ?? '', { shouldValidate: true });
+                  setValue('parent_category_id', id ?? '', {
+                    shouldValidate: true,
+                  });
                   setValue('category_id', null);
                 }}
               />
