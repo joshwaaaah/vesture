@@ -54,7 +54,9 @@ beforeEach(() => {
 describe('useWardrobeItems', () => {
   it('returns items when Supabase responds with data', async () => {
     mockFrom.mockReturnValue({
-      select: jest.fn().mockResolvedValue({ data: mockItems, error: null }),
+      select: jest.fn().mockReturnValue({
+        order: jest.fn().mockResolvedValue({ data: mockItems, error: null }),
+      }),
     });
 
     const { result } = renderHook(() => useWardrobeItems(), {
@@ -70,7 +72,9 @@ describe('useWardrobeItems', () => {
 
   it('is in a loading state before the query resolves', () => {
     mockFrom.mockReturnValue({
-      select: jest.fn().mockReturnValue(new Promise(() => {})), // never resolves
+      select: jest.fn().mockReturnValue({
+        order: jest.fn().mockReturnValue(new Promise(() => {})),
+      }),
     });
 
     const { result } = renderHook(() => useWardrobeItems(), {
@@ -83,9 +87,8 @@ describe('useWardrobeItems', () => {
 
   it('returns an error state when Supabase returns an error', async () => {
     mockFrom.mockReturnValue({
-      select: jest.fn().mockResolvedValue({
-        data: null,
-        error: { message: 'Database error' },
+      select: jest.fn().mockReturnValue({
+        order: jest.fn().mockResolvedValue({ data: null, error: { message: 'Database error' } }),
       }),
     });
 
@@ -100,7 +103,9 @@ describe('useWardrobeItems', () => {
 
   it('returns an empty array when the user has no items', async () => {
     mockFrom.mockReturnValue({
-      select: jest.fn().mockResolvedValue({ data: [], error: null }),
+      select: jest.fn().mockReturnValue({
+        order: jest.fn().mockResolvedValue({ data: [], error: null }),
+      }),
     });
 
     const { result } = renderHook(() => useWardrobeItems(), {
@@ -110,5 +115,17 @@ describe('useWardrobeItems', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     expect(result.current.data).toEqual([]);
+  });
+
+  it('requests items ordered by created_at descending', async () => {
+    const mockOrder = jest.fn().mockResolvedValue({ data: mockItems, error: null });
+    mockFrom.mockReturnValue({
+      select: jest.fn().mockReturnValue({ order: mockOrder }),
+    });
+
+    renderHook(() => useWardrobeItems(), { wrapper: createWrapper() });
+
+    await waitFor(() => expect(mockOrder).toHaveBeenCalled());
+    expect(mockOrder).toHaveBeenCalledWith('created_at', { ascending: false });
   });
 });

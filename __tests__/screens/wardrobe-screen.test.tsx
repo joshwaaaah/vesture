@@ -36,13 +36,19 @@ const mockItems: WardrobeItem[] = [
   },
 ];
 
+function mockQuery(data: WardrobeItem[] | null, error: { message: string } | null = null) {
+  mockFrom.mockReturnValue({
+    select: jest.fn().mockReturnValue({
+      order: jest.fn().mockResolvedValue({ data, error }),
+    }),
+  });
+}
+
 beforeEach(() => jest.clearAllMocks());
 
 describe('<WardrobeScreen />', () => {
   it('renders item titles when data loads', async () => {
-    mockFrom.mockReturnValue({
-      select: jest.fn().mockResolvedValue({ data: mockItems, error: null }),
-    });
+    mockQuery(mockItems);
 
     render(<WardrobeScreen />, { wrapper: createWrapper() });
 
@@ -50,9 +56,7 @@ describe('<WardrobeScreen />', () => {
   });
 
   it('shows an empty state when there are no items', async () => {
-    mockFrom.mockReturnValue({
-      select: jest.fn().mockResolvedValue({ data: [], error: null }),
-    });
+    mockQuery([]);
 
     render(<WardrobeScreen />, { wrapper: createWrapper() });
 
@@ -62,9 +66,7 @@ describe('<WardrobeScreen />', () => {
   });
 
   it('shows the correct item count for a single item', async () => {
-    mockFrom.mockReturnValue({
-      select: jest.fn().mockResolvedValue({ data: mockItems, error: null }),
-    });
+    mockQuery(mockItems);
 
     render(<WardrobeScreen />, { wrapper: createWrapper() });
 
@@ -72,14 +74,7 @@ describe('<WardrobeScreen />', () => {
   });
 
   it('shows the correct item count for multiple items', async () => {
-    const twoItems: WardrobeItem[] = [
-      ...mockItems,
-      { ...mockItems[0], id: 'uuid-2' },
-    ];
-
-    mockFrom.mockReturnValue({
-      select: jest.fn().mockResolvedValue({ data: twoItems, error: null }),
-    });
+    mockQuery([...mockItems, { ...mockItems[0], id: 'uuid-2' }]);
 
     render(<WardrobeScreen />, { wrapper: createWrapper() });
 
@@ -87,9 +82,7 @@ describe('<WardrobeScreen />', () => {
   });
 
   it('shows "0 items" when there are no items', async () => {
-    mockFrom.mockReturnValue({
-      select: jest.fn().mockResolvedValue({ data: [], error: null }),
-    });
+    mockQuery([]);
 
     render(<WardrobeScreen />, { wrapper: createWrapper() });
 
@@ -97,12 +90,7 @@ describe('<WardrobeScreen />', () => {
   });
 
   it('shows an error state when the query fails', async () => {
-    mockFrom.mockReturnValue({
-      select: jest.fn().mockResolvedValue({
-        data: null,
-        error: { message: 'Database error' },
-      }),
-    });
+    mockQuery(null, { message: 'Database error' });
 
     render(<WardrobeScreen />, { wrapper: createWrapper() });
 

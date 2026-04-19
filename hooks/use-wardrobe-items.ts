@@ -8,7 +8,10 @@ export function useWardrobeItems() {
   return useQuery({
     queryKey: ['wardrobe-items'],
     queryFn: async () => {
-      const { data, error } = await supabase.from('wardrobe_items').select('*');
+      const { data, error } = await supabase
+        .from('wardrobe_items')
+        .select('*')
+        .order('created_at', { ascending: false });
       if (error) throw error;
       return data;
     },
