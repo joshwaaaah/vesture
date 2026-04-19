@@ -1,13 +1,13 @@
+import CreateWardrobeItemScreen from '@/app/(tabs)/wardrobe/create';
+import { createWrapper } from '@/test-utils/create-wrapper';
+import type { Tables } from '@/types/database.types';
+import { supabase } from '@/utils/supabase';
 import {
+  fireEvent,
   render,
   screen,
   waitFor,
-  fireEvent,
 } from '@testing-library/react-native';
-import CreateWardrobeItemScreen from '@/app/(tabs)/wardrobe/create';
-import { supabase } from '@/utils/supabase';
-import { createWrapper } from '@/test-utils/create-wrapper';
-import type { Tables } from '@/types/database.types';
 
 jest.mock('@/utils/supabase', () => ({
   supabase: {
