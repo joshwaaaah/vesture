@@ -10,6 +10,7 @@ import {
   type WardrobeItem as WardrobeItemType,
 } from '@/hooks/use-wardrobe-items';
 import { useDefaultWardrobe } from '@/hooks/use-default-wardrobe';
+import { tokens } from '@/constants/theme';
 
 export default function WardrobeScreen() {
   const { data, isLoading, isError } = useWardrobeItems();
@@ -27,7 +28,7 @@ export default function WardrobeScreen() {
     if (isError) {
       return (
         <View className="flex-1 items-center justify-center px-6">
-          <AppText className="text-center text-neutral-500">
+          <AppText className="text-center text-surface-primary-foreground-secondary">
             Something went wrong. Please try again.
           </AppText>
         </View>
@@ -37,7 +38,7 @@ export default function WardrobeScreen() {
     if (!data || data.length === 0) {
       return (
         <View className="flex-1 items-center justify-center px-6">
-          <AppText className="text-center text-neutral-500">
+          <AppText className="text-center text-surface-primary-foreground-secondary">
             Your wardrobe is empty.
           </AppText>
         </View>
@@ -79,10 +80,10 @@ export default function WardrobeScreen() {
     <>
       <StatusBar style="dark" />
       <SafeAreaView
-        className="flex-1 bg-white"
+        className="flex-1 bg-surface-primary-background"
         edges={['right', 'left', 'top']}
       >
-        <View className="px-6 py-4 border-y border-neutral-200 flex-row items-center justify-between">
+        <View className="px-6 py-4 border-y border-surface-primary-border flex-row items-center justify-between">
           <AppText className="text-3xl font-eb-garamond-400">Vesture</AppText>
           <Pressable
             onPress={() =>
@@ -93,15 +94,15 @@ export default function WardrobeScreen() {
             }
             disabled={!wardrobe}
           >
-            <Ionicons name="add" size={28} color="black" />
+            <Ionicons name="add" size={28} color={tokens.surface.primary.foreground} />
           </Pressable>
         </View>
 
-        <View className="px-6 flex-row items-center justify-between py-4 border-b border-neutral-200">
+        <View className="px-6 flex-row items-center justify-between py-4 border-b border-surface-primary-border">
           <AppText className="text-lg">
             {data?.length ?? 0} item{data?.length !== 1 ? 's' : ''}
           </AppText>
-          <Ionicons name="filter-sharp" size={22} color="black" />
+          <Ionicons name="filter-sharp" size={22} color={tokens.surface.primary.foreground} />
         </View>
 
         {renderContent()}

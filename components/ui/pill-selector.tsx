@@ -25,14 +25,14 @@ export function PillSelector({ options, selectedId, onSelect, disabled }: Props)
             onPress={() => onSelect(isSelected ? null : option.id)}
             className={`px-4 py-2 rounded-full border ${
               disabled
-                ? 'bg-white border-neutral-200 opacity-40'
+                ? 'bg-pill-background border-pill-border opacity-40'
                 : isSelected
-                  ? 'bg-black border-black'
-                  : 'bg-white border-neutral-200'
+                  ? 'bg-pill-selected-background border-pill-selected-border'
+                  : 'bg-pill-background border-pill-border'
             }`}
           >
             <AppText
-              className={`font-manrope-500 text-sm ${disabled || !isSelected ? 'text-black' : 'text-white'}`}
+              className={`font-manrope-500 text-sm ${disabled || !isSelected ? 'text-pill-foreground' : 'text-pill-selected-foreground'}`}
             >
               {option.name}
             </AppText>

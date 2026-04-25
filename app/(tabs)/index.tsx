@@ -4,7 +4,7 @@ import { AppText } from '@/components/ui/text';
 export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1">
-      <AppText className="text-white">Home</AppText>
+      <AppText className="text-surface-inverted-foreground">Home</AppText>
     </SafeAreaView>
   );
 }

@@ -1,6 +1,7 @@
 import { Image, View } from 'react-native';
 import { AppText } from '../ui/text';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { tokens } from '@/constants/theme';
 
 type WardrobeItemProps = {
   title: string;
@@ -16,7 +17,7 @@ export default function WardrobeItem({
   favourited,
 }: WardrobeItemProps) {
   return (
-    <View className="border-b border-r border-neutral-200">
+    <View className="border-b border-r border-wardrobe-item-border">
       {image ? (
         <Image
           source={{ uri: image }}
@@ -24,14 +25,14 @@ export default function WardrobeItem({
           resizeMode="cover"
         />
       ) : (
-        <View className="w-full aspect-[3/4] bg-neutral-100 items-center justify-center">
+        <View className="w-full aspect-[3/4] bg-wardrobe-item-placeholder items-center justify-center">
           <Ionicons name="image-outline" size={32} color="#a3a3a3" />
         </View>
       )}
       <View className="p-4 flex flex-row gap-2 justify-between">
         <View>
-          <AppText className="text-black text-xl">{title}</AppText>
-          <AppText className="text-neutral-700 mt-1">
+          <AppText className="text-wardrobe-item-foreground text-xl">{title}</AppText>
+          <AppText className="text-wardrobe-item-price mt-1">
             £{price.toFixed(2)}
           </AppText>
         </View>
@@ -39,7 +40,7 @@ export default function WardrobeItem({
           <Ionicons
             name={favourited ? 'heart' : 'heart-outline'}
             size={22}
-            color="black"
+            color={tokens.wardrobeItem.foreground}
           />
         </View>
       </View>
