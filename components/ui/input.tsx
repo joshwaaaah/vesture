@@ -9,7 +9,7 @@ export function Input({ className, ...props }: InputProps) {
     <TextInput
       className={
         className ||
-        'border rounded-lg p-5 border-gray-200 font-manrope-400 placeholder:text-gray-600'
+        'border rounded-lg p-5 border-input-border font-manrope-400 placeholder:text-input-placeholder'
       }
       {...props}
     />

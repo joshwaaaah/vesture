@@ -72,7 +72,7 @@ export default function Register() {
 
   return (
     <KeyboardAvoidingView
-      className="flex flex-1 bg-black"
+      className="flex flex-1 bg-surface-inverted-background"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <MeshGradientView
@@ -118,7 +118,7 @@ export default function Register() {
                 duration: 1500,
               }}
             >
-              <AppText className="text-4xl text-white font-manrope-600 text-center">
+              <AppText className="text-4xl text-surface-inverted-foreground font-manrope-600 text-center">
                 Register for an account.
               </AppText>
             </MotiText>
@@ -139,13 +139,13 @@ export default function Register() {
                 delay: 250,
               }}
             >
-              <AppText className="text-xl text-white text-center">
+              <AppText className="text-xl text-surface-inverted-foreground text-center">
                 Curate your collection, compose ensembles and showcase your
                 style.
               </AppText>
             </MotiText>
 
-            <View className="bg-white p-10 mt-12 shadow-xl rounded-xl flex flex-col gap-6">
+            <View className="bg-surface-primary-background p-10 mt-12 shadow-xl rounded-xl flex flex-col gap-6">
               <View>
                 <Controller
                   control={control}

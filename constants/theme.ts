@@ -1,29 +1,60 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 import { Platform } from 'react-native';
 
-const tintColorLight = '#d9fd2f';
-const tintColorDark = '#d9fd2f';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { grey, lime } = require('./palette') as {
+  grey: Record<number, string>;
+  lime: Record<number, string>;
+};
 
-export const Colors = {
-  light: {
-    text: '#ECEDEE',
-    background: '#23435d',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorLight,
+export const tokens = {
+  surface: {
+    primary: {
+      background:         grey[0],
+      foreground:         grey[900],
+      foregroundSecondary: grey[500],
+      border:             grey[200],
+      accent:             lime[300],
+    },
+    secondary: {
+      background:         grey[100],
+      foreground:         grey[700],
+      foregroundSecondary: grey[500],
+      border:             grey[200],
+      accent:             lime[300],
+    },
+    inverted: {
+      background:         grey[1000],
+      foreground:         grey[0],
+      foregroundSecondary: grey[400],
+      border:             grey[800],
+      accent:             lime[300],
+    },
   },
-  dark: {
-    text: '#ECEDEE',
-    background: '#23435d',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+  button: {
+    background: grey[1000],
+    foreground: grey[0],
+  },
+  pill: {
+    background: grey[0],
+    foreground: grey[1000],
+    border:     grey[200],
+    selected: {
+      background: grey[1000],
+      foreground: grey[0],
+      border:     grey[1000],
+    },
+  },
+  input: {
+    border:      grey[200],
+    placeholder: grey[500],
+  },
+  wardrobeItem: {
+    background:         grey[0],
+    border:             grey[200],
+    placeholder:        grey[100],
+    foreground:         grey[900],
+    foregroundSecondary: grey[500],
+    price:              grey[700],
   },
 };
 

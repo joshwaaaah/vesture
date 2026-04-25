@@ -84,7 +84,7 @@ export default function CreateWardrobeItemScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-surface-primary-background">
       <ScrollView contentContainerClassName="px-6 gap-6">
         <View>
           <FormLabel>Title</FormLabel>

@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { AppText } from '@/components/ui/text';
+import { tokens } from '@/constants/theme';
 
 type Props = PressableProps & {
   title: string;
@@ -13,9 +14,9 @@ type Props = PressableProps & {
 
 export function Button({ loading, title, testID, ...rest }: Props) {
   return (
-    <Pressable testID={testID} {...rest} className="bg-black p-5 rounded-xl">
+    <Pressable testID={testID} {...rest} className="bg-button-background p-5 rounded-xl">
       <AppText
-        className={`text-center text-white text-lg font-manrope-600 ${loading ? 'opacity-0' : ''}`}
+        className={`text-center text-button-foreground text-lg font-manrope-600 ${loading ? 'opacity-0' : ''}`}
       >
         {title}
       </AppText>
@@ -25,7 +26,7 @@ export function Button({ loading, title, testID, ...rest }: Props) {
           <ActivityIndicator
             testID={testID ? `${testID}-loading` : undefined}
             size="small"
-            color="#ffffff"
+            color={tokens.button.foreground}
           />
         </View>
       )}

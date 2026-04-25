@@ -54,7 +54,7 @@ export default function Login() {
 
   return (
     <KeyboardAvoidingView
-      className="flex flex-1 bg-black"
+      className="flex flex-1 bg-surface-inverted-background"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <MeshGradientView
@@ -100,7 +100,7 @@ export default function Login() {
                 duration: 1500,
               }}
             >
-              <AppText className="text-4xl text-white font-manrope-600 text-center">
+              <AppText className="text-4xl text-surface-inverted-foreground font-manrope-600 text-center">
                 Welcome back to your digital wardrobe.
               </AppText>
             </MotiText>
@@ -121,13 +121,13 @@ export default function Login() {
                 delay: 250,
               }}
             >
-              <AppText className="text-xl text-white text-center">
+              <AppText className="text-xl text-surface-inverted-foreground text-center">
                 Curate your collection, compose ensembles and showcase your
                 style.
               </AppText>
             </MotiText>
 
-            <View className="bg-white p-10 mt-20 shadow-xl rounded-xl flex flex-col gap-6">
+            <View className="bg-surface-primary-background p-10 mt-20 shadow-xl rounded-xl flex flex-col gap-6">
               <View>
                 <Controller
                   control={control}
