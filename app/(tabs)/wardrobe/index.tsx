@@ -13,7 +13,7 @@ import { useDefaultWardrobe } from '@/hooks/use-default-wardrobe';
 import { useCategories } from '@/hooks/use-categories';
 import { useColors } from '@/hooks/use-colors';
 import { useSizes } from '@/hooks/use-sizes';
-import { tokens } from '@/constants/theme';
+import { colors } from '@/constants/colors';
 
 export default function WardrobeScreen() {
   const { data, isLoading, isError } = useWardrobeItems();
@@ -102,7 +102,7 @@ export default function WardrobeScreen() {
             }
             disabled={!wardrobe}
           >
-            <Ionicons name="add" size={28} color={tokens.surface.primary.foreground} />
+            <Ionicons name="add" size={28} color={colors.surface.primary.foreground} />
           </Pressable>
         </View>
 
@@ -110,7 +110,7 @@ export default function WardrobeScreen() {
           <AppText className="text-lg">
             {data?.length ?? 0} item{data?.length !== 1 ? 's' : ''}
           </AppText>
-          <Ionicons name="filter-sharp" size={22} color={tokens.surface.primary.foreground} />
+          <Ionicons name="filter-sharp" size={22} color={colors.surface.primary.foreground} />
         </View>
 
         {renderContent()}

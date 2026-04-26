@@ -98,6 +98,8 @@ export type Database = {
           image_url: string | null
           notes: string | null
           price: number | null
+          seasons: Database["public"]["Enums"]["season"][]
+          shop_url: string | null
           size_id: string | null
           title: string
           updated_at: string | null
@@ -113,6 +115,8 @@ export type Database = {
           image_url?: string | null
           notes?: string | null
           price?: number | null
+          seasons?: Database["public"]["Enums"]["season"][]
+          shop_url?: string | null
           size_id?: string | null
           title: string
           updated_at?: string | null
@@ -128,6 +132,8 @@ export type Database = {
           image_url?: string | null
           notes?: string | null
           price?: number | null
+          seasons?: Database["public"]["Enums"]["season"][]
+          shop_url?: string | null
           size_id?: string | null
           title?: string
           updated_at?: string | null
@@ -208,7 +214,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      season: "spring" | "summer" | "autumn" | "winter"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -335,6 +341,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      season: ["spring", "summer", "autumn", "winter"],
+    },
   },
 } as const

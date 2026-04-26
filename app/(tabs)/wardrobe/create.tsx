@@ -1,3 +1,5 @@
+import { type Enums } from '@/types/database.types';
+
 import * as yup from 'yup';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
@@ -10,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { FormLabel } from '@/components/ui/form-label';
 import { FormError } from '@/components/ui/form-error';
 import { PillSelector } from '@/components/ui/pill-selector';
+import { MultiPillSelector } from '@/components/ui/multi-pill-selector';
 import { useCreateWardrobeItem } from '@/hooks/use-create-wardrobe-item';
 import { useCategories } from '@/hooks/use-categories';
 import { useColors } from '@/hooks/use-colors';
@@ -20,6 +23,13 @@ const schema = yup.object({
   title: yup.string().required('Please enter a title'),
   price: yup.number().required('Please enter a price'),
   notes: yup.string().nullable(),
+  shop_url: yup
+    .string()
+    .matches(
+      /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+      'Please enter a valid URL',
+    )
+    .nullable(),
   favourited: yup.boolean().default(false),
   parent_category_id: yup.string().required('Please select a category'),
   category_id: yup
@@ -32,7 +42,15 @@ const schema = yup.object({
     }),
   color_id: yup.string().nullable(),
   size_id: yup.string().nullable(),
+  seasons: yup.array(yup.string<Enums<'season'>>().required()).default([]),
 });
+
+const SEASON_OPTIONS = [
+  { id: 'spring', name: 'Spring' },
+  { id: 'summer', name: 'Summer' },
+  { id: 'autumn', name: 'Autumn' },
+  { id: 'winter', name: 'Winter' },
+];
 
 export default function CreateWardrobeItemScreen() {
   const { wardrobeId } = useLocalSearchParams<{ wardrobeId?: string }>();
@@ -136,6 +154,24 @@ export default function CreateWardrobeItemScreen() {
           />
         </View>
 
+        <View>
+          <FormLabel>Shop URL</FormLabel>
+          <Controller
+            control={control}
+            name="shop_url"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="e.g. https://shop.example.com/item"
+                keyboardType="url"
+                autoCapitalize="none"
+                onChangeText={onChange}
+                value={value ?? ''}
+              />
+            )}
+          />
+          <FormError error={errors.shop_url} />
+        </View>
+
         {parentCategories.length > 0 && (
           <>
             <View>
@@ -206,6 +242,21 @@ export default function CreateWardrobeItemScreen() {
             />
           </View>
         )}
+
+        <View>
+          <FormLabel>Season</FormLabel>
+          <Controller
+            control={control}
+            name="seasons"
+            render={({ field: { value, onChange } }) => (
+              <MultiPillSelector
+                options={SEASON_OPTIONS}
+                selectedIds={value ?? []}
+                onSelect={onChange}
+              />
+            )}
+          />
+        </View>
 
         <View>
           <FormLabel>Add to favourites</FormLabel>

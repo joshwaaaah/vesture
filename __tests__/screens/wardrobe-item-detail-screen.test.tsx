@@ -3,6 +3,10 @@ import WardrobeItemDetailScreen from '@/app/(tabs)/wardrobe/[id]';
 import { createWrapper } from '@/test-utils/create-wrapper';
 import type { WardrobeItemWithDetails } from '@/hooks/use-wardrobe-item';
 
+jest.mock('react-native/Libraries/Linking/Linking', () => ({
+  openURL: jest.fn(),
+}));
+
 jest.mock('@/utils/supabase', () => ({
   supabase: {
     from: jest.fn().mockReturnThis(),
@@ -34,6 +38,8 @@ const mockItem: WardrobeItemWithDetails = {
   user_id: 'user-uuid-1',
   created_at: '2026-01-01T00:00:00Z',
   updated_at: null,
+  seasons: [],
+  shop_url: null,
   category: null,
   color: null,
   size: null,
@@ -84,6 +90,18 @@ describe('<WardrobeItemDetailScreen />', () => {
     expect(screen.getByText('M')).toBeTruthy();
   });
 
+  it('renders seasons when present', async () => {
+    mockSingle.mockResolvedValue({
+      data: { ...mockItem, seasons: ['spring', 'autumn'] },
+      error: null,
+    });
+
+    render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() => expect(screen.getByText('Season')).toBeTruthy());
+    expect(screen.getByText('Spring, Autumn')).toBeTruthy();
+  });
+
   it('shows a placeholder when image_url is null', async () => {
     mockSingle.mockResolvedValue({
       data: { ...mockItem, image_url: null },
@@ -95,5 +113,16 @@ describe('<WardrobeItemDetailScreen />', () => {
     await waitFor(() =>
       expect(screen.getByTestId('image-placeholder')).toBeTruthy(),
     );
+  });
+
+  it('renders a shop link when shop_url is present', async () => {
+    mockSingle.mockResolvedValue({
+      data: { ...mockItem, shop_url: 'https://shop.example.com/black-jacket' },
+      error: null,
+    });
+
+    render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() => expect(screen.getByText('View in shop')).toBeTruthy());
   });
 });

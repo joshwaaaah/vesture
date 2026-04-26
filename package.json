@@ -7,7 +7,7 @@
     "reset-project": "node ./scripts/reset-project.js",
     "web": "expo start --web",
     "lint": "expo lint",
-    "types:db": "supabase gen types typescript --project-id aqcmjdnqncecnwmvlbld --schema public > types/database.types.ts",
+    "types:db": "npx supabase gen types typescript --project-id aqcmjdnqncecnwmvlbld --schema public > types/database.types.ts",
     "test": "jest --passWithNoTests --detectOpenHandles",
     "test:watch": "jest --watchAll --detectOpenHandles"
   },

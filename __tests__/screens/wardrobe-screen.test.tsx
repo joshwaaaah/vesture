@@ -16,6 +16,10 @@ jest.mock('@/hooks/use-default-wardrobe', () => ({
   useDefaultWardrobe: () => ({ data: null }),
 }));
 
+jest.mock('@/hooks/use-categories', () => ({ useCategories: () => ({}) }));
+jest.mock('@/hooks/use-colors', () => ({ useColors: () => ({}) }));
+jest.mock('@/hooks/use-sizes', () => ({ useSizes: () => ({}) }));
+
 const mockFrom = jest.mocked(supabase.from);
 
 const mockItems: WardrobeItem[] = [
@@ -33,10 +37,15 @@ const mockItems: WardrobeItem[] = [
     user_id: 'user-uuid-1',
     created_at: '2026-01-01T00:00:00Z',
     updated_at: null,
+    seasons: [],
+    shop_url: null,
   },
 ];
 
-function mockQuery(data: WardrobeItem[] | null, error: { message: string } | null = null) {
+function mockQuery(
+  data: WardrobeItem[] | null,
+  error: { message: string } | null = null,
+) {
   mockFrom.mockReturnValue({
     select: jest.fn().mockReturnValue({
       order: jest.fn().mockResolvedValue({ data, error }),
