@@ -10,11 +10,19 @@ import {
   type WardrobeItem as WardrobeItemType,
 } from '@/hooks/use-wardrobe-items';
 import { useDefaultWardrobe } from '@/hooks/use-default-wardrobe';
+import { useCategories } from '@/hooks/use-categories';
+import { useColors } from '@/hooks/use-colors';
+import { useSizes } from '@/hooks/use-sizes';
 import { tokens } from '@/constants/theme';
 
 export default function WardrobeScreen() {
   const { data, isLoading, isError } = useWardrobeItems();
   const { data: wardrobe } = useDefaultWardrobe();
+
+  // Prefetch reference data so the create modal renders without layout shift.
+  useCategories();
+  useColors();
+  useSizes();
 
   const renderContent = () => {
     if (isLoading) {
