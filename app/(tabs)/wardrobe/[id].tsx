@@ -1,25 +1,62 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Skeleton } from 'moti/skeleton';
-import { Image, Linking, Pressable, ScrollView, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  Linking,
+  Pressable,
+  ScrollView,
+  View,
+} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { AppText } from '@/components/ui/text';
 import { useWardrobeItem } from '@/hooks/use-wardrobe-item';
+import { useDeleteWardrobeItem } from '@/hooks/use-delete-wardrobe-item';
 import { colors } from '@/constants/colors';
 
 export default function WardrobeItemDetailScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { data: item, isLoading, isError } = useWardrobeItem(id);
+  const { mutate: deleteItem } = useDeleteWardrobeItem();
+
+  function handleDelete() {
+    if (!item) return;
+    Alert.alert('Delete item', 'Are you sure you want to delete this item?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () =>
+          deleteItem(item.id, {
+            onSuccess: () => router.back(),
+            onError: (err) =>
+              Alert.alert(
+                'Error',
+                err instanceof Error
+                  ? err.message
+                  : 'We were unable to delete the item',
+              ),
+          }),
+      },
+    ]);
+  }
 
   if (isLoading) {
     return (
       <SafeAreaView className="flex-1 bg-wardrobe-item-background">
         <Skeleton.Group show>
-          <View className="px-6 py-4 border-y border-wardrobe-item-border">
+          <View className="px-6 py-4 border-y border-wardrobe-item-border flex-row items-center justify-between">
             <Pressable onPress={() => router.back()}>
               <AppText className="text-xl">Back to wardrobe</AppText>
             </Pressable>
+
+            <Ionicons
+              name="trash-outline"
+              size={22}
+              color={colors['wardrobe-item'].foreground}
+            />
           </View>
 
           <ScrollView contentInsetAdjustmentBehavior="automatic">
@@ -128,9 +165,20 @@ export default function WardrobeItemDetailScreen() {
       className="flex-1 bg-wardrobe-item-background"
       edges={['right', 'left', 'top']}
     >
-      <View className="px-6 py-4 border-y border-wardrobe-item-border">
+      <View className="px-6 py-4 border-y border-wardrobe-item-border flex-row justify-between items-center">
         <Pressable onPress={() => router.back()}>
           <AppText className="text-xl">Back to wardrobe</AppText>
+        </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Delete item"
+          onPress={handleDelete}
+        >
+          <Ionicons
+            name="trash-outline"
+            size={22}
+            color={colors['wardrobe-item'].foreground}
+          />
         </Pressable>
       </View>
 
