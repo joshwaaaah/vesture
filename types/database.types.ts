@@ -99,6 +99,7 @@ export type Database = {
           notes: string | null
           price: number | null
           seasons: Database["public"]["Enums"]["season"][]
+          shop_url: string | null
           size_id: string | null
           title: string
           updated_at: string | null
@@ -115,6 +116,7 @@ export type Database = {
           notes?: string | null
           price?: number | null
           seasons?: Database["public"]["Enums"]["season"][]
+          shop_url?: string | null
           size_id?: string | null
           title: string
           updated_at?: string | null
@@ -131,6 +133,7 @@ export type Database = {
           notes?: string | null
           price?: number | null
           seasons?: Database["public"]["Enums"]["season"][]
+          shop_url?: string | null
           size_id?: string | null
           title?: string
           updated_at?: string | null
