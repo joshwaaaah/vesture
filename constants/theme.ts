@@ -46,8 +46,9 @@ export const tokens = {
   wardrobeItem: {
     background: palette.grey[0],
     border: palette.grey[200],
-    placeholder: palette.grey[100],
-    placeholderSecondary: palette.grey[200],
+    placeholderBackground: palette.grey[100],
+    placeholderForeground: palette.grey[400],
+    placeholderBackgroundSecondary: palette.grey[200],
     foreground: palette.grey[900],
     foregroundSecondary: palette.grey[500],
     price: palette.grey[700],

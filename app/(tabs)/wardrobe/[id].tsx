@@ -25,7 +25,7 @@ export default function WardrobeItemDetailScreen() {
           <ScrollView contentInsetAdjustmentBehavior="automatic">
             <View
               testID="image-placeholder"
-              className="w-full aspect-[3/4] bg-wardrobe-item-placeholder items-center justify-center"
+              className="w-full aspect-[3/4] bg-wardrobe-item-placeholder-background items-center justify-center"
             >
               <Ionicons name="image-outline" size={32} color="#a3a3a3" />
             </View>
@@ -37,9 +37,9 @@ export default function WardrobeItemDetailScreen() {
                     width={200}
                     height={20}
                     colors={[
-                      tokens.wardrobeItem.placeholderSecondary,
+                      tokens.wardrobeItem.placeholderBackgroundSecondary,
                       '#e5e5e5',
-                      tokens.wardrobeItem.placeholderSecondary,
+                      tokens.wardrobeItem.placeholderBackgroundSecondary,
                     ]}
                   ></Skeleton>
                 </View>
@@ -48,9 +48,9 @@ export default function WardrobeItemDetailScreen() {
                     width={100}
                     height={20}
                     colors={[
-                      tokens.wardrobeItem.placeholderSecondary,
+                      tokens.wardrobeItem.placeholderBackgroundSecondary,
                       '#e5e5e5',
-                      tokens.wardrobeItem.placeholderSecondary,
+                      tokens.wardrobeItem.placeholderBackgroundSecondary,
                     ]}
                   ></Skeleton>
                 </View>
@@ -65,9 +65,9 @@ export default function WardrobeItemDetailScreen() {
                     width={200}
                     height={15}
                     colors={[
-                      tokens.wardrobeItem.placeholderSecondary,
+                      tokens.wardrobeItem.placeholderBackgroundSecondary,
                       '#e5e5e5',
-                      tokens.wardrobeItem.placeholderSecondary,
+                      tokens.wardrobeItem.placeholderBackgroundSecondary,
                     ]}
                   ></Skeleton>
                 </View>
@@ -80,9 +80,9 @@ export default function WardrobeItemDetailScreen() {
                     width={200}
                     height={15}
                     colors={[
-                      tokens.wardrobeItem.placeholderSecondary,
+                      tokens.wardrobeItem.placeholderBackgroundSecondary,
                       '#e5e5e5',
-                      tokens.wardrobeItem.placeholderSecondary,
+                      tokens.wardrobeItem.placeholderBackgroundSecondary,
                     ]}
                   ></Skeleton>
                 </View>
@@ -95,9 +95,9 @@ export default function WardrobeItemDetailScreen() {
                     width={200}
                     height={15}
                     colors={[
-                      tokens.wardrobeItem.placeholderSecondary,
+                      tokens.wardrobeItem.placeholderBackgroundSecondary,
                       '#e5e5e5',
-                      tokens.wardrobeItem.placeholderSecondary,
+                      tokens.wardrobeItem.placeholderBackgroundSecondary,
                     ]}
                   ></Skeleton>
                 </View>
