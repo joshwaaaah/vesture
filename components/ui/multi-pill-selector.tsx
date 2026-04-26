@@ -13,7 +13,12 @@ type Props = {
   disabled?: boolean;
 };
 
-export function MultiPillSelector({ options, selectedIds, onSelect, disabled }: Props) {
+export function MultiPillSelector({
+  options,
+  selectedIds,
+  onSelect,
+  disabled,
+}: Props) {
   return (
     <View className="flex-row flex-wrap gap-2">
       {options.map((option) => {
