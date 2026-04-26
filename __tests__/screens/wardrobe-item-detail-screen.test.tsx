@@ -1,7 +1,14 @@
-import { render, screen, waitFor } from '@testing-library/react-native';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+} from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import WardrobeItemDetailScreen from '@/app/(tabs)/wardrobe/[id]';
 import { createWrapper } from '@/test-utils/create-wrapper';
 import type { WardrobeItemWithDetails } from '@/hooks/use-wardrobe-item';
+import { useDeleteWardrobeItem } from '@/hooks/use-delete-wardrobe-item';
 
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
   openURL: jest.fn(),
@@ -15,6 +22,8 @@ jest.mock('@/utils/supabase', () => ({
     single: jest.fn(),
   },
 }));
+
+jest.mock('@/hooks/use-delete-wardrobe-item');
 
 const mockSingle: jest.Mock =
   jest.requireMock('@/utils/supabase').supabase.single;
@@ -45,7 +54,17 @@ const mockItem: WardrobeItemWithDetails = {
   size: null,
 };
 
-beforeEach(() => jest.clearAllMocks());
+const mockMutate = jest.fn();
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  jest
+    .mocked(useDeleteWardrobeItem)
+    // Partial mock to avoid type errors. I can't be bothered typing the entire thing properly.
+    .mockReturnValue({ mutate: mockMutate } as unknown as ReturnType<
+      typeof useDeleteWardrobeItem
+    >);
+});
 
 describe('<WardrobeItemDetailScreen />', () => {
   it('renders item details when data is loaded', async () => {
@@ -124,5 +143,76 @@ describe('<WardrobeItemDetailScreen />', () => {
     render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
 
     await waitFor(() => expect(screen.getByText('View in shop')).toBeTruthy());
+  });
+
+  it('renders a delete button when the item is loaded', async () => {
+    mockSingle.mockResolvedValue({ data: mockItem, error: null });
+
+    render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Delete item' })).toBeTruthy(),
+    );
+  });
+
+  it('shows a confirmation alert when the delete button is pressed', async () => {
+    mockSingle.mockResolvedValue({ data: mockItem, error: null });
+    const alertSpy = jest.spyOn(Alert, 'alert');
+
+    render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Delete item' })).toBeTruthy(),
+    );
+    fireEvent.press(screen.getByRole('button', { name: 'Delete item' }));
+
+    expect(alertSpy).toHaveBeenCalledWith(
+      'Delete item',
+      'Are you sure you want to delete this item?',
+      expect.any(Array),
+    );
+  });
+
+  it('navigates back after confirming deletion', async () => {
+    mockSingle.mockResolvedValue({ data: mockItem, error: null });
+    const { router } = jest.requireMock('expo-router');
+
+    jest.spyOn(Alert, 'alert').mockImplementation((_title, _msg, buttons) => {
+      const confirm = buttons?.find((b) => b.style === 'destructive');
+      confirm?.onPress?.();
+    });
+
+    render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Delete item' })).toBeTruthy(),
+    );
+    fireEvent.press(screen.getByRole('button', { name: 'Delete item' }));
+
+    // Capture the onSuccess callback passed to mutate and invoke it
+    const [, callbacks] = mockMutate.mock.calls[0];
+    callbacks.onSuccess();
+
+    expect(router.back).toHaveBeenCalled();
+  });
+
+  it('shows an error alert when deletion fails', async () => {
+    mockSingle.mockResolvedValue({ data: mockItem, error: null });
+    const alertSpy = jest
+      .spyOn(Alert, 'alert')
+      .mockImplementationOnce((_title, _msg, buttons) => {
+        const confirm = buttons?.find((b) => b.style === 'destructive');
+        confirm?.onPress?.();
+      });
+
+    render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Delete item' })).toBeTruthy(),
+    );
+    fireEvent.press(screen.getByRole('button', { name: 'Delete item' }));
+
+    const [, callbacks] = mockMutate.mock.calls[0];
+    callbacks.onError(new Error('Delete failed'));
+
+    expect(alertSpy).toHaveBeenCalledWith('Error', 'Delete failed');
   });
 });
