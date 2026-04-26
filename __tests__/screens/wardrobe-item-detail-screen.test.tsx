@@ -85,6 +85,18 @@ describe('<WardrobeItemDetailScreen />', () => {
     expect(screen.getByText('M')).toBeTruthy();
   });
 
+  it('renders seasons when present', async () => {
+    mockSingle.mockResolvedValue({
+      data: { ...mockItem, seasons: ['spring', 'autumn'] },
+      error: null,
+    });
+
+    render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() => expect(screen.getByText('Season')).toBeTruthy());
+    expect(screen.getByText('Spring, Autumn')).toBeTruthy();
+  });
+
   it('shows a placeholder when image_url is null', async () => {
     mockSingle.mockResolvedValue({
       data: { ...mockItem, image_url: null },

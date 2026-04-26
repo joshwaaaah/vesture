@@ -16,6 +16,10 @@ jest.mock('@/hooks/use-default-wardrobe', () => ({
   useDefaultWardrobe: () => ({ data: null }),
 }));
 
+jest.mock('@/hooks/use-categories', () => ({ useCategories: () => ({}) }));
+jest.mock('@/hooks/use-colors', () => ({ useColors: () => ({}) }));
+jest.mock('@/hooks/use-sizes', () => ({ useSizes: () => ({}) }));
+
 const mockFrom = jest.mocked(supabase.from);
 
 const mockItems: WardrobeItem[] = [
