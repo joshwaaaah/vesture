@@ -23,6 +23,13 @@ const schema = yup.object({
   title: yup.string().required('Please enter a title'),
   price: yup.number().required('Please enter a price'),
   notes: yup.string().nullable(),
+  shop_url: yup
+    .string()
+    .matches(
+      /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+      'Please enter a valid URL',
+    )
+    .nullable(),
   favourited: yup.boolean().default(false),
   parent_category_id: yup.string().required('Please select a category'),
   category_id: yup
@@ -145,6 +152,24 @@ export default function CreateWardrobeItemScreen() {
               />
             )}
           />
+        </View>
+
+        <View>
+          <FormLabel>Shop URL</FormLabel>
+          <Controller
+            control={control}
+            name="shop_url"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="e.g. https://shop.example.com/item"
+                keyboardType="url"
+                autoCapitalize="none"
+                onChangeText={onChange}
+                value={value ?? ''}
+              />
+            )}
+          />
+          <FormError error={errors.shop_url} />
         </View>
 
         {parentCategories.length > 0 && (

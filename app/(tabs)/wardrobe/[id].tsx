@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Skeleton } from 'moti/skeleton';
-import { Image, Pressable, ScrollView, View } from 'react-native';
+import { Image, Linking, Pressable, ScrollView, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { AppText } from '@/components/ui/text';
@@ -212,6 +212,18 @@ export default function WardrobeItemDetailScreen() {
                     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
                     .join(', ')}
                 </AppText>
+              </View>
+            ) : null}
+            {item.shop_url ? (
+              <View className="flex-row justify-between">
+                <AppText className="text-wardrobe-item-foreground-secondary text-lg">
+                  Shop
+                </AppText>
+                <Pressable onPress={() => Linking.openURL(item.shop_url!)}>
+                  <AppText className="text-wardrobe-item-foreground text-lg underline">
+                    View in shop
+                  </AppText>
+                </Pressable>
               </View>
             ) : null}
           </View>
