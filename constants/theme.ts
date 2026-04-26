@@ -1,60 +1,56 @@
 import { Platform } from 'react-native';
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { grey, lime } = require('./palette') as {
-  grey: Record<number, string>;
-  lime: Record<number, string>;
-};
+import { palette } from '@/constants/palette';
 
 export const tokens = {
   surface: {
     primary: {
-      background:         grey[0],
-      foreground:         grey[900],
-      foregroundSecondary: grey[500],
-      border:             grey[200],
-      accent:             lime[300],
+      background: palette.grey[0],
+      foreground: palette.grey[900],
+      foregroundSecondary: palette.grey[500],
+      border: palette.grey[200],
+      accent: palette.lime[300],
     },
     secondary: {
-      background:         grey[100],
-      foreground:         grey[700],
-      foregroundSecondary: grey[500],
-      border:             grey[200],
-      accent:             lime[300],
+      background: palette.grey[100],
+      foreground: palette.grey[700],
+      foregroundSecondary: palette.grey[500],
+      border: palette.grey[200],
+      accent: palette.lime[300],
     },
     inverted: {
-      background:         grey[1000],
-      foreground:         grey[0],
-      foregroundSecondary: grey[400],
-      border:             grey[800],
-      accent:             lime[300],
+      background: palette.grey[1000],
+      foreground: palette.grey[0],
+      foregroundSecondary: palette.grey[400],
+      border: palette.grey[800],
+      accent: palette.lime[300],
     },
   },
   button: {
-    background: grey[1000],
-    foreground: grey[0],
+    background: palette.grey[1000],
+    foreground: palette.grey[0],
   },
   pill: {
-    background: grey[0],
-    foreground: grey[1000],
-    border:     grey[200],
+    background: palette.grey[0],
+    foreground: palette.grey[1000],
+    border: palette.grey[200],
     selected: {
-      background: grey[1000],
-      foreground: grey[0],
-      border:     grey[1000],
+      background: palette.grey[1000],
+      foreground: palette.grey[0],
+      border: palette.grey[1000],
     },
   },
   input: {
-    border:      grey[200],
-    placeholder: grey[500],
+    border: palette.grey[200],
+    placeholder: palette.grey[500],
   },
   wardrobeItem: {
-    background:         grey[0],
-    border:             grey[200],
-    placeholder:        grey[100],
-    foreground:         grey[900],
-    foregroundSecondary: grey[500],
-    price:              grey[700],
+    background: palette.grey[0],
+    border: palette.grey[200],
+    placeholder: palette.grey[100],
+    placeholderSecondary: palette.grey[200],
+    foreground: palette.grey[900],
+    foregroundSecondary: palette.grey[500],
+    price: palette.grey[700],
   },
 };
 

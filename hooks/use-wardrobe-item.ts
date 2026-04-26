@@ -6,7 +6,9 @@ import { NotFoundError } from '@/utils/errors';
 const buildQuery = (id: string) =>
   supabase
     .from('wardrobe_items')
-    .select('*, category:categories(name), color:colors(name), size:sizes(name)')
+    .select(
+      '*, category:categories(name), color:colors(name), size:sizes(name)',
+    )
     .eq('id', id)
     .single();
 
@@ -16,6 +18,7 @@ export function useWardrobeItem(id: string | undefined) {
   return useQuery({
     queryKey: ['wardrobe-items', id],
     enabled: !!id,
+    gcTime: 0,
     queryFn: async () => {
       const { data, error } = await buildQuery(id!);
       if (error) throw error;
