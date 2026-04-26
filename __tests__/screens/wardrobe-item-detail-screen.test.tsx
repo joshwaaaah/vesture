@@ -34,6 +34,7 @@ const mockItem: WardrobeItemWithDetails = {
   user_id: 'user-uuid-1',
   created_at: '2026-01-01T00:00:00Z',
   updated_at: null,
+  seasons: [],
   category: null,
   color: null,
   size: null,

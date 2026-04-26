@@ -1,7 +1,7 @@
 import { Image, View } from 'react-native';
 import { AppText } from '../ui/text';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { tokens } from '@/constants/theme';
+import { colors } from '@/constants/colors';
 
 type WardrobeItemProps = {
   title: string;
@@ -29,7 +29,7 @@ export default function WardrobeItem({
           <Ionicons
             name="image-outline"
             size={32}
-            color={tokens.wardrobeItem.placeholderForeground}
+            color={colors['wardrobe-item']['placeholder-foreground']}
           />
         </View>
       )}
@@ -46,7 +46,7 @@ export default function WardrobeItem({
           <Ionicons
             name={favourited ? 'heart' : 'heart-outline'}
             size={22}
-            color={tokens.wardrobeItem.foreground}
+            color={colors['wardrobe-item'].foreground}
           />
         </View>
       </View>

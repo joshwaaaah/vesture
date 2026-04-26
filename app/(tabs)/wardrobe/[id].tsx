@@ -6,7 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { AppText } from '@/components/ui/text';
 import { useWardrobeItem } from '@/hooks/use-wardrobe-item';
-import { tokens } from '@/constants/theme';
+import { colors } from '@/constants/colors';
 
 export default function WardrobeItemDetailScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -14,7 +14,7 @@ export default function WardrobeItemDetailScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView className="bg-wardrobe-item-background">
+      <SafeAreaView className="flex-1 bg-wardrobe-item-background">
         <Skeleton.Group show>
           <View className="px-6 py-4 border-y border-wardrobe-item-border">
             <Pressable onPress={() => router.back()}>
@@ -37,9 +37,9 @@ export default function WardrobeItemDetailScreen() {
                     width={200}
                     height={20}
                     colors={[
-                      tokens.wardrobeItem.placeholderBackgroundSecondary,
-                      '#e5e5e5',
-                      tokens.wardrobeItem.placeholderBackgroundSecondary,
+                      colors['wardrobe-item']['skeleton']['from'],
+                      colors['wardrobe-item']['skeleton']['via'],
+                      colors['wardrobe-item']['skeleton']['to'],
                     ]}
                   ></Skeleton>
                 </View>
@@ -48,9 +48,9 @@ export default function WardrobeItemDetailScreen() {
                     width={100}
                     height={20}
                     colors={[
-                      tokens.wardrobeItem.placeholderBackgroundSecondary,
-                      '#e5e5e5',
-                      tokens.wardrobeItem.placeholderBackgroundSecondary,
+                      colors['wardrobe-item']['skeleton']['from'],
+                      colors['wardrobe-item']['skeleton']['via'],
+                      colors['wardrobe-item']['skeleton']['to'],
                     ]}
                   ></Skeleton>
                 </View>
@@ -65,9 +65,9 @@ export default function WardrobeItemDetailScreen() {
                     width={200}
                     height={15}
                     colors={[
-                      tokens.wardrobeItem.placeholderBackgroundSecondary,
-                      '#e5e5e5',
-                      tokens.wardrobeItem.placeholderBackgroundSecondary,
+                      colors['wardrobe-item']['skeleton']['from'],
+                      colors['wardrobe-item']['skeleton']['via'],
+                      colors['wardrobe-item']['skeleton']['to'],
                     ]}
                   ></Skeleton>
                 </View>
@@ -80,9 +80,9 @@ export default function WardrobeItemDetailScreen() {
                     width={200}
                     height={15}
                     colors={[
-                      tokens.wardrobeItem.placeholderBackgroundSecondary,
-                      '#e5e5e5',
-                      tokens.wardrobeItem.placeholderBackgroundSecondary,
+                      colors['wardrobe-item']['skeleton']['from'],
+                      colors['wardrobe-item']['skeleton']['via'],
+                      colors['wardrobe-item']['skeleton']['to'],
                     ]}
                   ></Skeleton>
                 </View>
@@ -95,9 +95,9 @@ export default function WardrobeItemDetailScreen() {
                     width={200}
                     height={15}
                     colors={[
-                      tokens.wardrobeItem.placeholderBackgroundSecondary,
-                      '#e5e5e5',
-                      tokens.wardrobeItem.placeholderBackgroundSecondary,
+                      colors['wardrobe-item']['skeleton']['from'],
+                      colors['wardrobe-item']['skeleton']['via'],
+                      colors['wardrobe-item']['skeleton']['to'],
                     ]}
                   ></Skeleton>
                 </View>
@@ -144,9 +144,13 @@ export default function WardrobeItemDetailScreen() {
         ) : (
           <View
             testID="image-placeholder"
-            className="w-full aspect-[3/4] bg-wardrobe-item-placeholder items-center justify-center"
+            className="w-full aspect-[3/4] bg-wardrobe-item-placeholder-background items-center justify-center"
           >
-            <Ionicons name="image-outline" size={32} color="#a3a3a3" />
+            <Ionicons
+              name="image-outline"
+              size={32}
+              color={colors['wardrobe-item']['placeholder-foreground']}
+            />
           </View>
         )}
 
@@ -163,7 +167,7 @@ export default function WardrobeItemDetailScreen() {
             <Ionicons
               name={item.favourited ? 'heart' : 'heart-outline'}
               size={26}
-              color={tokens.wardrobeItem.foreground}
+              color={colors['wardrobe-item'].foreground}
             />
           </View>
 
@@ -195,6 +199,18 @@ export default function WardrobeItemDetailScreen() {
                 </AppText>
                 <AppText className="text-wardrobe-item-foreground text-lg">
                   {item.size.name}
+                </AppText>
+              </View>
+            ) : null}
+            {item.seasons && item.seasons.length > 0 ? (
+              <View className="flex-row justify-between">
+                <AppText className="text-wardrobe-item-foreground-secondary text-lg">
+                  Season
+                </AppText>
+                <AppText className="text-wardrobe-item-foreground text-lg">
+                  {item.seasons
+                    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+                    .join(', ')}
                 </AppText>
               </View>
             ) : null}

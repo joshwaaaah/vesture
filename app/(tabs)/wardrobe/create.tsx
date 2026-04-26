@@ -1,3 +1,5 @@
+import { type Enums } from '@/types/database.types';
+
 import * as yup from 'yup';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
@@ -10,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { FormLabel } from '@/components/ui/form-label';
 import { FormError } from '@/components/ui/form-error';
 import { PillSelector } from '@/components/ui/pill-selector';
+import { MultiPillSelector } from '@/components/ui/multi-pill-selector';
 import { useCreateWardrobeItem } from '@/hooks/use-create-wardrobe-item';
 import { useCategories } from '@/hooks/use-categories';
 import { useColors } from '@/hooks/use-colors';
@@ -32,7 +35,15 @@ const schema = yup.object({
     }),
   color_id: yup.string().nullable(),
   size_id: yup.string().nullable(),
+  seasons: yup.array(yup.string<Enums<'season'>>().required()).default([]),
 });
+
+const SEASON_OPTIONS = [
+  { id: 'spring', name: 'Spring' },
+  { id: 'summer', name: 'Summer' },
+  { id: 'autumn', name: 'Autumn' },
+  { id: 'winter', name: 'Winter' },
+];
 
 export default function CreateWardrobeItemScreen() {
   const { wardrobeId } = useLocalSearchParams<{ wardrobeId?: string }>();
@@ -206,6 +217,21 @@ export default function CreateWardrobeItemScreen() {
             />
           </View>
         )}
+
+        <View>
+          <FormLabel>Season</FormLabel>
+          <Controller
+            control={control}
+            name="seasons"
+            render={({ field: { value, onChange } }) => (
+              <MultiPillSelector
+                options={SEASON_OPTIONS}
+                selectedIds={value ?? []}
+                onSelect={onChange}
+              />
+            )}
+          />
+        </View>
 
         <View>
           <FormLabel>Add to favourites</FormLabel>
