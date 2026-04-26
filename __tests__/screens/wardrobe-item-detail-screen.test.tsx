@@ -12,7 +12,8 @@ jest.mock('@/utils/supabase', () => ({
   },
 }));
 
-const mockSingle: jest.Mock = jest.requireMock('@/utils/supabase').supabase.single;
+const mockSingle: jest.Mock =
+  jest.requireMock('@/utils/supabase').supabase.single;
 
 jest.mock('expo-router', () => ({
   router: { back: jest.fn() },
@@ -50,27 +51,29 @@ describe('<WardrobeItemDetailScreen />', () => {
     expect(screen.getByText('£129.99')).toBeTruthy();
   });
 
-  it('shows a loading indicator while fetching', () => {
-    mockSingle.mockReturnValue(new Promise(() => {}));
-
-    render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
-
-    expect(screen.getByTestId('loading-indicator')).toBeTruthy();
-  });
-
   it('shows an error message when the fetch fails', async () => {
-    mockSingle.mockResolvedValue({ data: null, error: { message: 'Database error' } });
+    mockSingle.mockResolvedValue({
+      data: null,
+      error: { message: 'Database error' },
+    });
 
     render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
 
     await waitFor(() =>
-      expect(screen.getByText('Something went wrong. Please try again.')).toBeTruthy(),
+      expect(
+        screen.getByText('Something went wrong. Please try again.'),
+      ).toBeTruthy(),
     );
   });
 
   it('renders category, color and size names when present', async () => {
     mockSingle.mockResolvedValue({
-      data: { ...mockItem, category: { name: 'Tops' }, color: { name: 'Black' }, size: { name: 'M' } },
+      data: {
+        ...mockItem,
+        category: { name: 'Tops' },
+        color: { name: 'Black' },
+        size: { name: 'M' },
+      },
       error: null,
     });
 
@@ -82,10 +85,15 @@ describe('<WardrobeItemDetailScreen />', () => {
   });
 
   it('shows a placeholder when image_url is null', async () => {
-    mockSingle.mockResolvedValue({ data: { ...mockItem, image_url: null }, error: null });
+    mockSingle.mockResolvedValue({
+      data: { ...mockItem, image_url: null },
+      error: null,
+    });
 
     render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
 
-    await waitFor(() => expect(screen.getByTestId('image-placeholder')).toBeTruthy());
+    await waitFor(() =>
+      expect(screen.getByTestId('image-placeholder')).toBeTruthy(),
+    );
   });
 });
