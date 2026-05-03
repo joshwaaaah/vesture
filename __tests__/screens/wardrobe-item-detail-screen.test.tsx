@@ -9,6 +9,7 @@ import WardrobeItemDetailScreen from '@/app/(tabs)/wardrobe/[id]';
 import { createWrapper } from '@/test-utils/create-wrapper';
 import type { WardrobeItemWithDetails } from '@/hooks/use-wardrobe-item';
 import { useDeleteWardrobeItem } from '@/hooks/use-delete-wardrobe-item';
+import { useToggleFavourite } from '@/hooks/use-toggle-favourite';
 
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
   openURL: jest.fn(),
@@ -24,6 +25,7 @@ jest.mock('@/utils/supabase', () => ({
 }));
 
 jest.mock('@/hooks/use-delete-wardrobe-item');
+jest.mock('@/hooks/use-toggle-favourite');
 
 const mockSingle: jest.Mock =
   jest.requireMock('@/utils/supabase').supabase.single;
@@ -54,15 +56,21 @@ const mockItem: WardrobeItemWithDetails = {
   size: null,
 };
 
-const mockMutate = jest.fn();
+const mockDeleteMutate = jest.fn();
+const mockToggleMutate = jest.fn();
 
 beforeEach(() => {
   jest.clearAllMocks();
   jest
     .mocked(useDeleteWardrobeItem)
     // Partial mock to avoid type errors. I can't be bothered typing the entire thing properly.
-    .mockReturnValue({ mutate: mockMutate } as unknown as ReturnType<
+    .mockReturnValue({ mutate: mockDeleteMutate } as unknown as ReturnType<
       typeof useDeleteWardrobeItem
+    >);
+  jest
+    .mocked(useToggleFavourite)
+    .mockReturnValue({ mutate: mockToggleMutate } as unknown as ReturnType<
+      typeof useToggleFavourite
     >);
 });
 
@@ -189,7 +197,7 @@ describe('<WardrobeItemDetailScreen />', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Delete item' }));
 
     // Capture the onSuccess callback passed to mutate and invoke it
-    const [, callbacks] = mockMutate.mock.calls[0];
+    const [, callbacks] = mockDeleteMutate.mock.calls[0];
     callbacks.onSuccess();
 
     expect(router.back).toHaveBeenCalled();
@@ -210,9 +218,36 @@ describe('<WardrobeItemDetailScreen />', () => {
     );
     fireEvent.press(screen.getByRole('button', { name: 'Delete item' }));
 
-    const [, callbacks] = mockMutate.mock.calls[0];
+    const [, callbacks] = mockDeleteMutate.mock.calls[0];
     callbacks.onError(new Error('Delete failed'));
 
     expect(alertSpy).toHaveBeenCalledWith('Error', 'Delete failed');
+  });
+
+  it('renders a pressable favourite button when the item is loaded', async () => {
+    mockSingle.mockResolvedValue({ data: mockItem, error: null });
+
+    render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Toggle favourite' }),
+      ).toBeTruthy(),
+    );
+  });
+
+  it('calls toggle mutate with the current favourited value when the heart is pressed', async () => {
+    mockSingle.mockResolvedValue({ data: mockItem, error: null });
+
+    render(<WardrobeItemDetailScreen />, { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: 'Toggle favourite' }),
+      ).toBeTruthy(),
+    );
+    fireEvent.press(screen.getByRole('button', { name: 'Toggle favourite' }));
+
+    expect(mockToggleMutate).toHaveBeenCalledWith(false);
   });
 });
