@@ -9,17 +9,38 @@ import {
   ScrollView,
   View,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { AppText } from '@/components/ui/text';
 import { useWardrobeItem } from '@/hooks/use-wardrobe-item';
 import { useDeleteWardrobeItem } from '@/hooks/use-delete-wardrobe-item';
+import { useToggleFavourite } from '@/hooks/use-toggle-favourite';
 import { colors } from '@/constants/colors';
 
 export default function WardrobeItemDetailScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { data: item, isLoading, isError } = useWardrobeItem(id);
   const { mutate: deleteItem } = useDeleteWardrobeItem();
+  const { mutate: toggleFavourite } = useToggleFavourite(id ?? '');
+  const heartScale = useSharedValue(1);
+  const heartAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: heartScale.value }],
+  }));
+
+  function handleToggleFavourite() {
+    if (!item) return;
+    heartScale.value = withSequence(
+      withTiming(1.3, { duration: 120 }),
+      withTiming(1, { duration: 200 }),
+    );
+    toggleFavourite(item.favourited);
+  }
 
   function handleDelete() {
     if (!item) return;
@@ -212,11 +233,19 @@ export default function WardrobeItemDetailScreen() {
                 £{(item.price ?? 0).toFixed(2)}
               </AppText>
             </View>
-            <Ionicons
-              name={item.favourited ? 'heart' : 'heart-outline'}
-              size={26}
-              color={colors['wardrobe-item'].foreground}
-            />
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Toggle favourite"
+              onPress={handleToggleFavourite}
+            >
+              <Animated.View style={heartAnimatedStyle}>
+                <Ionicons
+                  name={item.favourited ? 'heart' : 'heart-outline'}
+                  size={26}
+                  color={colors['wardrobe-item'].foreground}
+                />
+              </Animated.View>
+            </Pressable>
           </View>
 
           <View className="border-t border-wardrobe-item-border pt-4 mt-2 space-y-2">
